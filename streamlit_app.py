@@ -18,7 +18,7 @@ st.set_page_config(
 )
 
 from asistente_ui.styles import apply_custom_styles
-from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard
+from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard, render_evaluation_tab
 
 # ── LOGICA DE NEGOCIO (CON NOMBRES ÚNICOS) ──────────────────────
 from asistente_core.pdf_extractor import extract_text_from_pdf, sanitize_extracted_text
@@ -44,8 +44,8 @@ def main():
             <div style="height: 1rem;"></div>
         """, unsafe_allow_html=True)
         
-        # ── TABS: PDF, Texto, Comparar ───────────────────────────
-        tab_pdf, tab_text, tab_compare = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos"])
+        # ── TABS: PDF, Texto, Comparar, Evaluar ──────────────────────
+        tab_pdf, tab_text, tab_compare, tab_eval = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos", "🎯 Evaluar Detección"])
 
         with tab_pdf:
             uploaded_file = st.file_uploader(
@@ -56,13 +56,20 @@ def main():
             )
 
         with tab_text:
+            text_default = st.session_state.get("pasted_text_demo", "")
             pasted_text = st.text_area(
                 "Pega aquí el texto del contrato",
                 height=300,
                 key="text_single",
+                value=text_default,
                 placeholder="Copia y pega el contenido del contrato directamente aquí...",
                 help="Si no tienes el PDF, puedes pegar el texto del contrato manualmente."
             )
+            
+            # Limpiar el texto cargado de demo si el usuario ya analizó o cambió algo
+            if text_default and st.button("Limpiar Ejemplo", key="clear_demo"):
+                st.session_state.pasted_text_demo = ""
+                st.rerun()
 
         with tab_compare:
             st.markdown("<p style='color: white; font-weight: 500;'>Carga dos documentos para detectar discrepancias y cambios clave.</p>", unsafe_allow_html=True)
@@ -75,6 +82,9 @@ def main():
                 st.markdown("**Versión 2 (Documento Modificado)**")
                 comp_file2 = st.file_uploader("PDF 2", type=["pdf"], key="comp_file2")
                 comp_text2 = st.text_area("O pega el texto 2", height=150, key="comp_text2")
+
+        with tab_eval:
+            render_evaluation_tab()
 
     # Renderizar Sidebar (incluye historial)
     render_sidebar()

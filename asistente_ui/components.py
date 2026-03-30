@@ -247,3 +247,39 @@ def render_comparison_dashboard(data, name1="Contrato 1", name2="Contrato 2"):
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
+def render_evaluation_tab():
+    """Renderiza el modo de evaluación de capacidad de detección."""
+    from asistente_core.demo_cases import DEMO_CASES
+    
+    st.markdown('<div class="hero-container">', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-title">Evaluación de Capacidades</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="subtitle">Prueba el motor de IA con escenarios de riesgo prediseñados para verificar la profundidad del análisis institucional.</p>', unsafe_allow_html=True)
+    
+    st.markdown('<div style="height: 2rem;"></div>', unsafe_allow_html=True)
+    
+    cols = st.columns(len(DEMO_CASES))
+    for i, (name, case) in enumerate(DEMO_CASES.items()):
+        with cols[i]:
+            st.markdown(f"""
+            <div class="risk-card animated-card" style="min-height: 250px; display: flex; flex-direction: column; justify-content: space-between;">
+                <h4 style="color: var(--accent-yellow); margin-top: 0;">{name}</h4>
+                <p style="font-size: 0.9rem; color: #ccc;">{case['description']}</p>
+            </div>
+            """, unsafe_allow_html=True)
+            if st.button(f"Cargar {name.split(' ')[0]}", key=f"btn_demo_{i}", use_container_width=True):
+                st.session_state.pasted_text_demo = case['text']
+                st.session_state.demo_name = name
+                st.info(f"✅ Ejemplo '{name}' cargado en la pestaña 'Pegar Texto'. Ve allí para iniciar el análisis.")
+
+    st.markdown("""
+    <div style="background: rgba(255, 204, 0, 0.05); border: 1px solid rgba(255, 204, 0, 0.2); border-radius: 12px; padding: 20px; margin-top: 2rem;">
+        <h4 style="color: var(--accent-yellow); margin-top: 0;">¿Qué estamos evaluando?</h4>
+        <ul style="color: #ccc; font-size: 0.95rem;">
+            <li><b>Detección de asimetrías:</b> Desequilibrios en plazos, multas y facultades unilaterales.</li>
+            <li><b>Cláusulas abusivas encubiertas:</b> Renuncias de vicios ocultos o cobros de infraestructura.</li>
+            <li><b>Propiedad Intelectual (PI):</b> Cesión de desarrollos previos o pérdida de código fuente.</li>
+            <li><b>Riesgos económicos:</b> Reajustes excesivos o penalidades desproporcionadas.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
