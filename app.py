@@ -9,9 +9,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-from ui.styles import apply_custom_styles
-from ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer
-
 # 1. Configuración de página
 st.set_page_config(
     page_title="Copiloto Jurídico EAFIT | AI Legal Assistant",
@@ -20,20 +17,13 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ── LOGICA DE NEGOCIO (CON REINTENTO DE RUTAS) ──────────────────
-try:
-    from core.pdf_processor import extract_text_from_pdf
-    from core.llm_engine import analyze_contract
-    from core.risk_detector import process_analysis_results
-except ModuleNotFoundError:
-    try:
-        from asistente_contratos.core.pdf_processor import extract_text_from_pdf
-        from asistente_contratos.core.llm_engine import analyze_contract
-        from asistente_contratos.core.risk_detector import process_analysis_results
-    except:
-        st.error("🚀 Error crítico: No se encuentran las piezas del motor jurídico. Por favor contacta a soporte.")
-        st.write("Estructura detectada:", os.listdir(os.path.dirname(__file__)))
-        st.stop()
+from asistente_ui.styles import apply_custom_styles
+from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer
+
+# ── LOGICA DE NEGOCIO (CON NOMBRES ÚNICOS) ──────────────────────
+from asistente_core.pdf_processor import extract_text_from_pdf
+from asistente_core.llm_engine import analyze_contract
+from asistente_core.risk_detector import process_analysis_results
 
 # 2. Aplicar estilos personalizados (Nueva identidad visual)
 apply_custom_styles()
