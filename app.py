@@ -86,23 +86,8 @@ def main():
     if st.session_state.get("analysis_complete"):
         render_dashboard(st.session_state.analysis_data)
     else:
-        # Mostrar beneficios si no hay análisis (Cards Estilo EAFIT)
-        st.markdown("""
-        <div style="display: flex; justify-content: center; gap: 30px; margin-top: 5rem; margin-bottom: 5rem; max-width: 1200px; margin-left: auto; margin-right: auto;">
-            <div class="risk-card animated-card" style="flex: 1; text-align: center; border-bottom: 4px solid var(--accent-yellow);">
-                <h3 style="color: var(--accent-yellow); font-size: 1.4rem;">Respuestas en Segundos</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Escribe tu pregunta; el asistente produce respuestas claras, precisas y accionables.</p>
-            </div>
-            <div class="risk-card animated-card" style="flex: 1; text-align: center; border-bottom: 4px solid var(--accent-yellow);">
-                <h3 style="color: var(--accent-yellow); font-size: 1.4rem;">Fuentes Citadas</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Contenido transparente con referencias a legislación y jurisprudencia colombiana.</p>
-            </div>
-            <div class="risk-card animated-card" style="flex: 1; text-align: center; border-bottom: 4px solid var(--accent-yellow);">
-                <h3 style="color: var(--accent-yellow); font-size: 1.4rem;">Lenguaje Jurídico</h3>
-                <p style="color: var(--text-muted); font-size: 0.95rem;">Tono profesional alineado con los estándares de la Secretaría General.</p>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        # Mostrar el espacio vacío de forma limpia para que se aprecie la imagen de fondo
+        st.markdown("<div style='min-height: 20vh;'></div>", unsafe_allow_html=True)
 
     # 5. FOOTER INSTITUCIONAL (Siempre visible al final)
     render_footer()
