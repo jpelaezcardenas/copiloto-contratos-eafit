@@ -23,7 +23,7 @@ LLM_MAX_TOKENS = 8192
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
 # ── App Settings ─────────────────────────────────────────
-APP_TITLE = "⚖️ Copiloto Jurídico EAFIT"
+APP_TITLE = "⚖️ Asistente Análisis Contratos"
 APP_SUBTITLE = "Asistente Inteligente para Análisis de Contratos"
 MAX_FILE_SIZE_MB = 50
 SUPPORTED_FILE_TYPES = ["pdf"]

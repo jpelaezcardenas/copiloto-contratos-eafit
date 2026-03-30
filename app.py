@@ -38,7 +38,7 @@ def main():
         # ── HERO SECTION ─────────────────────────────────────
         st.markdown("""
             <div class="hero-container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                <h1 class="main-title">Copiloto Jurídico Estratégico</h1>
+                <h1 class="main-title">Asistente análisis contratos</h1>
                 <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales o comparativos en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>
             </div>
             <div style="height: 1rem;"></div>
