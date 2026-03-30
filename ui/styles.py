@@ -24,9 +24,12 @@ def apply_custom_styles():
             --accent-red: #EF4444;
         }
 
-        /* Reset general */
+        /* Reset general con fondo de imagen */
         .stApp {
-            background-color: var(--bg-dark);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)), url("https://www.eafit.edu.co/medios/institucional/PublishingImages/eafit-campus.jpg") ;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
         }

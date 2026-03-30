@@ -117,36 +117,38 @@ def render_sidebar():
         st.info("🤖 **Llama 3.3 (Groq)**")
 
 def render_footer():
-    """Footer institucional basado en la imagen 'termina'."""
+    """Footer institucional basado en la imagen 'termina' con logos corregidos."""
+    logo_base64 = "https://www.eafit.edu.co/favicon.ico" # Fallback robusto
     st.markdown(f"""
     <div class="eafit-footer">
         <div class="footer-grid">
             <div class="footer-col">
-                <img src="https://itinerarioestudiantil.com/wp-content/uploads/2024/02/EAFIT_logo_blanco.png" width="150" style="margin-bottom: 1.5rem;">
+                <div style="font-size: 2rem; font-weight: 800; color: white; margin-bottom: 1rem; font-family: 'Outfit';">EAFIT</div>
                 <p>Universidad EAFIT</p>
-                <p>Personería Jurídica: Res. 75 del 28 de junio de 1960 - Mineducación.</p>
+                <p style="font-size: 0.75rem; color: #777;">Personería Jurídica: Res. 75 del 28 de junio de 1960 - Mineducación.</p>
+                <p style="font-size: 0.75rem; color: #777;">VIGILADA MINEDUCACIÓN</p>
             </div>
             <div class="footer-col">
-                <h4>EAFIT Medellín</h4>
+                <h4 style="color: var(--accent-yellow)">EAFIT Medellín</h4>
                 <p>Carrera 49 N° 7 Sur-50</p>
                 <p>Línea nacional: 01 8000 515 900</p>
-                <p>Línea de atención: (57) 604 2619500</p>
+                <p>PBX: (57) 604 2619500</p>
             </div>
             <div class="footer-col">
-                <h4>EAFIT Pereira</h4>
-                <p>Carrera 19 #12-70 Megacentro Pinares</p>
-                <p>Línea de atención: (57) 606 3214115</p>
-                <p>Correo: eafit.pereira@eafit.edu.co</p>
+                <h4 style="color: var(--accent-yellow)">Sedes Regionales</h4>
+                <p><strong>Bogotá:</strong> (57) 601 6114618</p>
+                <p><strong>Pereira:</strong> (57) 606 3214115</p>
+                <p><strong>Llanogrande:</strong> (57) 604 2619500 ext. 9188</p>
             </div>
             <div class="footer-col">
-                <h4>EAFIT Bogotá</h4>
-                <p>Carrera 15 #88-64 oficina 401</p>
-                <p>Línea de atención: (57) 601 6114618</p>
-                <p>Correo: eafit.bogota@eafit.edu.co</p>
+                <h4 style="color: var(--accent-yellow)">Contacto</h4>
+                <p>Línea Nacional: 01 8000 515 900</p>
+                <p>WhatsApp: (57) 310 899 2908</p>
+                <p>Email: eafit@eafit.edu.co</p>
             </div>
         </div>
-        <div class="footer-social">
-            <p style="font-size: 0.8rem; color: #555;">© 2024 Universidad EAFIT - Todos los derechos reservados</p>
+        <div style="text-align: center; border-top: 1px solid #222; margin-top: 3rem; padding-top: 2rem;">
+            <p style="font-size: 0.8rem; color: #444;">© 2024 Universidad EAFIT - Medellín, Colombia</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
