@@ -134,8 +134,65 @@ def render_sidebar():
                     st.rerun()
                     
         st.markdown("---")
-        st.markdown("#### Configuración")
-        st.info("🤖 **Llama 3.3 (Groq)**")
+        st.markdown("""
+        <div style="
+            background: linear-gradient(135deg, rgba(25, 25, 35, 0.7) 0%, rgba(15, 15, 20, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: 'Inter', sans-serif;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.5)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.4)';">
+            <h4 style="margin-top:0; color:#E8E8E8; font-size:12px; text-transform:uppercase; letter-spacing:1.5px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                <span style="color:#00E5FF; font-size:14px;">⚡</span> Arquitectura Premium
+            </h4>
+            
+            <div style="display: flex; align-items: center; margin-top: 12px;">
+                <div style="background: rgba(255,87,34,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 16px;">🧠</span>
+                </div>
+                <div style="line-height: 1.3;">
+                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">LPU Groq Inference</div>
+                    <div style="color: #9E9E9E; font-size: 11px;">Motor Llama 3.3 Ultra-rápido</div>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; margin-top: 14px;">
+                <div style="background: rgba(255,75,75,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 16px;">☁️</span>
+                </div>
+                <div style="line-height: 1.3;">
+                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">Streamlit Cloud</div>
+                    <div style="color: #9E9E9E; font-size: 11px;">Alojamiento Serverless & UI</div>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; margin-top: 14px;">
+                <div style="background: rgba(66,133,244,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 16px;">🌐</span>
+                </div>
+                <div style="line-height: 1.3;">
+                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">Google GenAI</div>
+                    <div style="color: #9E9E9E; font-size: 11px;">Capacidades Semánticas Core</div>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; margin-top: 14px;">
+                <div style="background: rgba(255,212,59,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+                    <span style="font-size: 16px;">🐍</span>
+                </div>
+                <div style="line-height: 1.3;">
+                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">Python Native API</div>
+                    <div style="color: #9E9E9E; font-size: 11px;">Orquestación Backend Segura</div>
+                </div>
+            </div>
+            
+        </div>
+        """, unsafe_allow_html=True)
 
 def render_footer():
     """Footer institucional minimalista."""
