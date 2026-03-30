@@ -20,10 +20,20 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ── LOGICA DE NEGOCIO ──────────────────────────────────
-from core.pdf_processor import extract_text_from_pdf
-from core.llm_engine import analyze_contract
-from core.risk_detector import process_analysis_results
+# ── LOGICA DE NEGOCIO (CON REINTENTO DE RUTAS) ──────────────────
+try:
+    from core.pdf_processor import extract_text_from_pdf
+    from core.llm_engine import analyze_contract
+    from core.risk_detector import process_analysis_results
+except ModuleNotFoundError:
+    try:
+        from asistente_contratos.core.pdf_processor import extract_text_from_pdf
+        from asistente_contratos.core.llm_engine import analyze_contract
+        from asistente_contratos.core.risk_detector import process_analysis_results
+    except:
+        st.error("🚀 Error crítico: No se encuentran las piezas del motor jurídico. Por favor contacta a soporte.")
+        st.write("Estructura detectada:", os.listdir(os.path.dirname(__file__)))
+        st.stop()
 
 # 2. Aplicar estilos personalizados (Nueva identidad visual)
 apply_custom_styles()
