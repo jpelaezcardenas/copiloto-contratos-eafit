@@ -14,13 +14,12 @@ def apply_custom_styles():
     except:
         pass
 
-    st.markdown(
-        f"""
+    css_content = """
         <style>
         /* Importar tipografía moderna */
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-        :root {{
+        :root {
             --primary: #003399; /* Azul EAFIT */
             --primary-glow: rgba(0, 51, 153, 0.3);
             --bg-dark: #000000;
@@ -32,16 +31,16 @@ def apply_custom_styles():
             --accent-yellow: #FFCC00;
             --accent-green: #10B981;
             --accent-red: #EF4444;
-        }}
+        }
 
         /* Reset general con fondo de imagen (Base64) */
-        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
-            background-image: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.96)), url("data:image/webp;base64,{bg_img_base64}") !important;
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.96)), url("data:image/webp;base64,__BG_IMG_BASE64__") !important;
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
             background-color: black !important;
-        }}
+        }
 
         /* Limpiar fondos de contenedores internos */
         .main, .block-container {
@@ -181,6 +180,8 @@ def apply_custom_styles():
         }
 
         </style>
-        """,
-        unsafe_allow_html=True,
-    )
+        """
+    
+    # Inyectar la variable de forma segura
+    css_content = css_content.replace("__BG_IMG_BASE64__", bg_img_base64)
+    st.markdown(css_content, unsafe_allow_html=True)
