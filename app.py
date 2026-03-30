@@ -30,9 +30,10 @@ apply_custom_styles()
 
 def main():
     # ── BANNER INSTITUCIONAL ─────────────────────────────
-    st.markdown('<div style="background-color: #000; padding: 1rem; border-bottom: 1px solid #333; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center;">', unsafe_allow_html=True)
-    st.markdown('<div style="color: #666; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;">SECRETARÍA GENERAL | ASISTENTE LEGAL AI</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div style="text-align: center; margin-bottom: 2rem; color: #888; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;">SECRETARÍA GENERAL | ASISTENTE LEGAL AI</div>', 
+        unsafe_allow_html=True
+    )
 
     # ── HERO SECTION ─────────────────────────────────────
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
