@@ -31,17 +31,20 @@ apply_custom_styles()
 def main():
     # ── BANNER INSTITUCIONAL ELIMINADO ─────────────────────────────
 
+    # ── ESPACIO SUPERIOR PARA DISTRIBUCIÓN VERTICAL ───
+    st.markdown("<div style='height: 12vh;'></div>", unsafe_allow_html=True)
+
     # ── HERO SECTION ─────────────────────────────────────
     st.markdown("""
         <div class="hero-container" style="text-align: center;">
             <h1 class="main-title">Asistente para Análisis de Contratos</h1>
             <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>
         </div>
-        <div style="height: 4rem;"></div>
+        <div style="height: 3rem;"></div>
     """, unsafe_allow_html=True)
     
     # ── ÁREA DE CARGA DE DOCUMENTOS ───────────────────────
-    col_u1, col_u2, col_u3 = st.columns([1, 5, 1])
+    col_u1, col_u2, col_u3 = st.columns([1, 6, 1])
     with col_u2:
         uploaded_file = st.file_uploader(
             "Carga el contrato (PDF) para iniciar el análisis institucional", 
