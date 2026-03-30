@@ -4,3 +4,4 @@ PyMuPDF
 pdfplumber
 python-dotenv
 openai
+groq

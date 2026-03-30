@@ -2,68 +2,50 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 
+# 1. Cargar .env por si acaso se corre local (aunque el usuario prioriza Cloud)
 load_dotenv()
 
-# ── API Keys ──────────────────────────────────────────────
-# Intentar obtener de st.secrets (Nube) primero, luego de env (Local)
-def get_secret(key, default=""):
+# 2. Inyección de Secretos para Streamlit Cloud
+# Esto resuelve el problema de tiempo de inicialización sugerido por el usuario
+def initialize_env_secrets():
     try:
+        if "GROQ_API_KEY" in st.secrets:
+            os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+            # print("DEBUG: GROQ_API_KEY injected into os.environ from st.secrets")
+    except:
+        pass
+
+initialize_env_secrets()
+
+# 3. Helpers para obtener secretos
+def get_secret(key, default=""):
+    """Prioriza st.secrets (Cloud) sobre os.getenv (Local)."""
+    try:
+        # En Streamlit Cloud, st.secrets es un dict-like
         return st.secrets.get(key, os.getenv(key, default))
     except:
         return os.getenv(key, default)
 
+# 4. Configuración Global
 GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
 DEEPSEEK_API_KEY = get_secret("DEEPSEEK_API_KEY")
 GROQ_API_KEY = get_secret("GROQ_API_KEY")
 
-# ── LLM Settings ─────────────────────────────────────────
-LLM_MODEL = "llama-3.3-70b-versatile"
-LLM_TEMPERATURE = 0.1
-LLM_MAX_TOKENS = 8192
+# URL base para Groq (endpoint compatible con OpenAI si se usa OpenAI SDK, 
+# pero el usuario pidió Groq SDK nativo)
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
-# ── App Settings ─────────────────────────────────────────
-APP_TITLE = "⚖️ Asistente Análisis Contratos"
-APP_SUBTITLE = "Asistente Inteligente para Análisis de Contratos"
-MAX_FILE_SIZE_MB = 50
-SUPPORTED_FILE_TYPES = ["pdf"]
+# Modelo por defecto (según prompt original)
+LLM_MODEL = "llama-3.3-70b-versatile"
+LLM_TEMPERATURE = 0.1
+LLM_MAX_TOKENS = 4096
 
-# ── Risk Categories ──────────────────────────────────────
+# Configuración de categorías de riesgo (Taxonomía EAFIT)
 RISK_CATEGORIES = {
-    "ambiguedad": {
-        "label": "Ambigüedad",
-        "icon": "🟡",
-        "description": "Lenguaje que permite múltiples interpretaciones",
-        "referencia": "Artículo 1624 Código Civil",
-    },
-    "falta_penalidades": {
-        "label": "Falta de Penalidades",
-        "icon": "🔴",
-        "description": "Ausencia de multa por mora o incumplimiento",
-        "referencia": "Artículo 1592 Código Civil",
-    },
-    "clausulas_abusivas": {
-        "label": "Cláusulas Abusivas",
-        "icon": "🔴",
-        "description": "Desequilibrio injustificado para una de las partes",
-        "referencia": "Artículo 42 Ley 1480 de 2011",
-    },
-    "ruptura_equilibrio": {
-        "label": "Ruptura de Equilibrio",
-        "icon": "🟠",
-        "description": "Terminación unilateral sin indemnización justa",
-        "referencia": "Sentencias del Consejo de Estado",
-    },
-    "vigencia_inconsistente": {
-        "label": "Vigencia Inconsistente",
-        "icon": "🟡",
-        "description": "Fechas contradictorias o renovación automática sin preaviso",
-        "referencia": "Ley 1480 de 2011",
-    },
-    "terminacion_deficiente": {
-        "label": "Terminación Deficiente",
-        "icon": "🟠",
-        "description": "Falta de causales claras de terminación o procedimientos de salida",
-        "referencia": "Código Civil / Código de Comercio",
-    },
+    "AMBIGUEDAD": "Cláusulas imprecisas o confusas.",
+    "PENALIDADES": "Sanciones desproporcionadas o unilaterales.",
+    "VALIDEZ": "Incumplimiento de normativa colombiana (CST, CC, etc.).",
+    "TERMINACION": "Condiciones de salida asimétricas.",
+    "PROPIEDAD_INTELECTUAL": "Riesgos en la titularidad de derechos.",
+    "JURISDICCION": "Conflictos de leyes o fueros extranjeros."
 }

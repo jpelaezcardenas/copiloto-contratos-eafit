@@ -2,31 +2,40 @@
 
 import json
 import re
-from openai import OpenAI
-from config.settings import GROQ_API_KEY, GROQ_BASE_URL, LLM_MODEL, LLM_TEMPERATURE, LLM_MAX_TOKENS
-from asistente_core.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT
+import streamlit as st
+from groq import Groq
+from config.settings import LLM_MODEL, LLM_TEMPERATURE, LLM_MAX_TOKENS, RISK_CATEGORIES
 
+# No importaremos GROQ_API_KEY a nivel de módulo para evitar que sea estática si cambia el entorno
 
 def get_client():
-    """Crea el cliente de Groq (estilo OpenAI)."""
-    if not GROQ_API_KEY:
+    """Crea el cliente de Groq (Nativo)."""
+    # 1. Obtener clave de secrets (Cloud) o env (Local)
+    api_key = st.secrets.get("GROQ_API_KEY", "")
+    
+    if not api_key:
+        import os
+        api_key = os.getenv("GROQ_API_KEY", "")
+
+    if not api_key:
         raise ValueError(
             "❌ GROQ_API_KEY no configurada. "
-            "Obtén una en console.groq.com"
+            "Asegúrate de agregarla en los 'Secrets' de Streamlit Cloud."
         )
-    return OpenAI(api_key=GROQ_API_KEY, base_url=GROQ_BASE_URL)
+        
+    return Groq(api_key=api_key)
 
 
 def analyze_contract(contract_text: str) -> dict:
     """Analiza un contrato usando Groq y devuelve el análisis estructurado."""
+    from asistente_core.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT
     client = get_client()
 
-    # Truncar texto si es muy largo (Groq tiene límites de tokens según el modelo)
-    max_chars = 30_000 # Llama 3 en Groq tiene límites de TPM
+    # Truncar texto si es muy largo
+    max_chars = 30_000
     if len(contract_text) > max_chars:
         contract_text = contract_text[:max_chars] + "\n\n[... DOCUMENTO TRUNCADO ...]"
 
-    # Usar replace en lugar de format para evitar errores con llaves
     prompt = ANALYSIS_PROMPT.replace("{{CONTRACT_TEXT}}", contract_text)
 
     try:
@@ -45,7 +54,11 @@ def analyze_contract(contract_text: str) -> dict:
         return _parse_llm_response(raw_text)
         
     except Exception as e:
-        raise Exception(f"Error de comunicación con Groq: {str(e)}")
+        # Extraer mensaje de error legible para el usuario
+        error_msg = str(e)
+        if "401" in error_msg:
+            error_msg = "Error 401: API Key inválida o no configurada en Streamlit Cloud Secrets."
+        raise Exception(f"Error de comunicación con Groq: {error_msg}")
 
 
 def _parse_llm_response(raw_text: str) -> dict:
@@ -82,10 +95,10 @@ def _parse_llm_response(raw_text: str) -> dict:
 
 def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
     """Compara dos contratos usando Groq."""
-    from asistente_core.prompts import COMPARISON_PROMPT
+    from asistente_core.prompts import SYSTEM_PROMPT, COMPARISON_PROMPT
     client = get_client()
 
-    max_chars = 15_000 # Límite truncado menor ya que son dos textos
+    max_chars = 15_000 
     c1 = contract1_text[:max_chars] if len(contract1_text) > max_chars else contract1_text
     c2 = contract2_text[:max_chars] if len(contract2_text) > max_chars else contract2_text
 
@@ -106,7 +119,6 @@ def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
         raw_text = response.choices[0].message.content.strip()
         data = _parse_llm_response(raw_text)
         if "error" in data and data["error"]:
-            # Customizing error default if parsing fails in comparison
             return {
                 "diferencias": [],
                 "resumen_comparacion": "Error procesando comparación.",
