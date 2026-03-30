@@ -31,7 +31,7 @@ apply_custom_styles()
 def main():
     # ── BANNER INSTITUCIONAL ─────────────────────────────
     st.markdown(
-        '<div style="text-align: center; margin-bottom: 2rem; color: #888; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;">SECRETARÍA GENERAL | ASISTENTE LEGAL AI</div>', 
+        '<div style="text-align: center; margin-bottom: 1rem; color: #888; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;">SECRETARÍA GENERAL | ASISTENTE LEGAL AI</div>', 
         unsafe_allow_html=True
     )
 
@@ -44,7 +44,7 @@ def main():
     )
     
     # ── ÁREA DE CARGA DE DOCUMENTOS ───────────────────────
-    col_u1, col_u2, col_u3 = st.columns([1, 2, 1])
+    col_u1, col_u2, col_u3 = st.columns([1, 5, 1])
     with col_u2:
         uploaded_file = st.file_uploader(
             "Carga el contrato (PDF) para iniciar el análisis institucional", 
@@ -86,8 +86,8 @@ def main():
     if st.session_state.get("analysis_complete"):
         render_dashboard(st.session_state.analysis_data)
     else:
-        # Mostrar el espacio vacío de forma limpia para que se aprecie la imagen de fondo
-        st.markdown("<div style='min-height: 20vh;'></div>", unsafe_allow_html=True)
+        # Espacio mínimo solo si no hay resultados ni carga para balancear el footer si sube mucho
+        st.markdown("<div style='height: 2vh;'></div>", unsafe_allow_html=True)
 
     # 5. FOOTER INSTITUCIONAL (Siempre visible al final)
     render_footer()

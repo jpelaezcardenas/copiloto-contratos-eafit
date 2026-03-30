@@ -42,9 +42,11 @@ def apply_custom_styles():
             background-color: black !important;
         }
 
-        /* Limpiar fondos de contenedores internos */
+        /* Limpiar fondos de contenedores internos y reducir padding top/bottom */
         .main, .block-container {
             background: transparent !important;
+            padding-top: 2rem !important;
+            padding-bottom: 1rem !important;
         }
 
         h1, h2, h3, .main-title {
@@ -53,27 +55,27 @@ def apply_custom_styles():
             letter-spacing: -0.02em;
         }
 
-        /* Hero Section */
+        /* Hero Section - Reducir el padding para evitar scroll */
         .hero-container {
-            padding: 5rem 1rem 3rem 1rem;
+            padding: 1rem 1rem 1rem 1rem;
             text-align: center;
             background: linear-gradient(180deg, rgba(0, 51, 153, 0.15) 0%, transparent 100%);
         }
 
         .main-title {
-            font-size: 3.5rem !important;
+            font-size: 3rem !important; /* Un poco más pequeño para ahorrar espacio */
             background: linear-gradient(135deg, #FFFFFF 0%, #FFCC00 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 1rem !important;
+            margin-bottom: 0.5rem !important;
         }
 
         .subtitle {
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             color: var(--text-muted);
             max-width: 800px;
-            margin: 0 auto 2.5rem auto;
-            line-height: 1.6;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.5;
         }
 
         /* Botones estilo EAFIT */
@@ -95,13 +97,24 @@ def apply_custom_styles():
             transform: translateY(-2px);
         }
 
-        /* Footer Institucional */
+        /* Drag and Drop Zone Ampliado */
+        div[data-testid="stFileUploaderDropzone"] {
+            min-height: 250px !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 51, 153, 0.1) !important;
+            border: 2px dashed var(--accent-yellow) !important;
+            border-radius: 12px;
+        }
+
+        /* Footer Institucional - Más compacto */
         .eafit-footer {
             background-color: #000000;
             color: white;
-            padding: 4rem 2rem;
+            padding: 2rem 2rem 1rem 2rem;
             border-top: 1px solid #333;
-            margin-top: 5rem;
+            margin-top: 2rem;
             font-family: 'Inter', sans-serif;
         }
 
