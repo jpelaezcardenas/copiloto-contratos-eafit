@@ -135,55 +135,45 @@ def render_sidebar():
                     
         st.markdown("---")
         st.markdown("""
-        <div style="
-            background: rgba(25, 25, 35, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 10px;
-            font-family: 'Inter', sans-serif;
-        ">
-            <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <div style="background: rgba(255,87,34,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
-                    <span style="font-size: 16px;">🧠</span>
-                </div>
-                <div style="line-height: 1.3;">
-                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">LPU Groq Inference</div>
-                    <div style="color: #9E9E9E; font-size: 11px;">Motor Llama 3.3 Ultra-rápido</div>
-                </div>
-            </div>
-            
-            <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <div style="background: rgba(255,75,75,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
-                    <span style="font-size: 16px;">☁️</span>
-                </div>
-                <div style="line-height: 1.3;">
-                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">Streamlit Cloud</div>
-                    <div style="color: #9E9E9E; font-size: 11px;">Alojamiento Serverless & UI</div>
-                </div>
-            </div>
-
-            <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                <div style="background: rgba(66,133,244,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
-                    <span style="font-size: 16px;">🌐</span>
-                </div>
-                <div style="line-height: 1.3;">
-                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">Google GenAI</div>
-                    <div style="color: #9E9E9E; font-size: 11px;">Capacidades Semánticas Core</div>
-                </div>
-            </div>
-            
-            <div style="display: flex; align-items: center;">
-                <div style="background: rgba(255,212,59,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
-                    <span style="font-size: 16px;">🐍</span>
-                </div>
-                <div style="line-height: 1.3;">
-                    <div style="color: #FFF; font-size: 13px; font-weight: 600;">Python Native API</div>
-                    <div style="color: #9E9E9E; font-size: 11px;">Orquestación Backend Segura</div>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+<div style="background: rgba(25, 25, 35, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px; margin-top: 10px; font-family: 'Inter', sans-serif;">
+<div style="display: flex; align-items: center; margin-bottom: 12px;">
+<div style="background: rgba(255,87,34,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+<span style="font-size: 16px;">🧠</span>
+</div>
+<div style="line-height: 1.3;">
+<div style="color: #FFF; font-size: 13px; font-weight: 600;">LPU Groq Inference</div>
+<div style="color: #9E9E9E; font-size: 11px;">Motor Llama 3.3 Ultra-rápido</div>
+</div>
+</div>
+<div style="display: flex; align-items: center; margin-bottom: 12px;">
+<div style="background: rgba(255,75,75,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+<span style="font-size: 16px;">☁️</span>
+</div>
+<div style="line-height: 1.3;">
+<div style="color: #FFF; font-size: 13px; font-weight: 600;">Streamlit Cloud</div>
+<div style="color: #9E9E9E; font-size: 11px;">Alojamiento Serverless & UI</div>
+</div>
+</div>
+<div style="display: flex; align-items: center; margin-bottom: 12px;">
+<div style="background: rgba(66,133,244,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+<span style="font-size: 16px;">🌐</span>
+</div>
+<div style="line-height: 1.3;">
+<div style="color: #FFF; font-size: 13px; font-weight: 600;">Google GenAI</div>
+<div style="color: #9E9E9E; font-size: 11px;">Capacidades Semánticas Core</div>
+</div>
+</div>
+<div style="display: flex; align-items: center;">
+<div style="background: rgba(255,212,59,0.1); border-radius: 6px; padding: 4px; margin-right: 12px; width: 28px; height: 28px; display: flex; justify-content: center; align-items: center;">
+<span style="font-size: 16px;">🐍</span>
+</div>
+<div style="line-height: 1.3;">
+<div style="color: #FFF; font-size: 13px; font-weight: 600;">Python Native API</div>
+<div style="color: #9E9E9E; font-size: 11px;">Orquestación Backend Segura</div>
+</div>
+</div>
+</div>
+""", unsafe_allow_html=True)
 
 def render_footer():
     """Footer institucional minimalista."""
