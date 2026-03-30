@@ -1,1 +1,1 @@
-# Archivo de inicialización de core
+# Package core
