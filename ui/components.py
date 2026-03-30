@@ -90,3 +90,17 @@ def render_dashboard(data):
                 </div>
             </div>
             """, unsafe_allow_html=True)
+
+def render_sidebar():
+    """Barra lateral estilizada."""
+    with st.sidebar:
+        st.markdown("<h2 style='color: white; font-family: Outfit;'>Copiloto Jurídico EAFIT</h2>", unsafe_allow_html=True)
+        st.markdown("<hr style='border-color: rgba(255,255,255,0.1)'/>", unsafe_allow_html=True)
+        st.markdown("<p style='color: #94A3B8; font-size: 0.9rem;'>Analista inteligente optimizado para la normativa de la Secretaría General.</p>", unsafe_allow_html=True)
+        st.write("")
+        st.success("🤖 Motor: **Groq (Llama 3)**")
+        st.info("⚡ Análisis en segundos")
+
+def show_loading_animation():
+    """Animación de carga personalizada."""
+    return st.spinner("⚖️ Procesando documento legal, detectando riesgos y verificando normativa... Un momento por favor.")
