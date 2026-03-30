@@ -8,8 +8,16 @@ def _format_value(value):
         return ", ".join([str(i) for i in value if str(i).strip()])
     if isinstance(value, bool):
         return "Sí" if value else "No"
+    if isinstance(value, dict):
+        # Convertir diccionario a texto legible: "Clave: Valor, Clave2: Valor2"
+        parts = []
+        for k, v in value.items():
+            k_clean = k.replace('_', ' ').title()
+            v_clean = _format_value(v) # Recursivo
+            parts.append(f"{k_clean}: {v_clean}")
+        return " | ".join(parts)
     if value == "No especificado" or value == ["No especificado"]:
-        return "Notificado como pendiente"
+        return "Pendiente de identificar"
     return str(value)
 
 def render_dashboard(data):
