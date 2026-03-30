@@ -4,7 +4,7 @@ import json
 import re
 from openai import OpenAI
 from config.settings import GROQ_API_KEY, GROQ_BASE_URL, LLM_MODEL, LLM_TEMPERATURE, LLM_MAX_TOKENS
-from core.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT
+from asistente_core.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT
 
 
 def get_client():

@@ -21,8 +21,8 @@ from asistente_ui.styles import apply_custom_styles
 from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer
 
 # ── LOGICA DE NEGOCIO (CON NOMBRES ÚNICOS) ──────────────────────
-from asistente_core.pdf_processor import extract_text_from_pdf
-from asistente_core.llm_engine import analyze_contract
+from asistente_core.pdf_extractor import extract_text_from_pdf
+from asistente_core.llm_analyzer import analyze_contract
 from asistente_core.risk_detector import process_analysis_results
 
 # 2. Aplicar estilos personalizados (Nueva identidad visual)
