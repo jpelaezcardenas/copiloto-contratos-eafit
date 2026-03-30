@@ -131,6 +131,44 @@ def apply_custom_styles():
             animation: fadeIn 0.5s ease-out forwards;
         }
 
+        /* Semáforo Global Neón */
+        .semaforo-banner {
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+        }
+
+        .semaforo-glow-ALTO { box-shadow: 0 0 50px rgba(239, 68, 68, 0.3); border-color: rgba(239, 68, 68, 0.5); }
+        .semaforo-glow-MEDIO { box-shadow: 0 0 50px rgba(245, 158, 11, 0.3); border-color: rgba(245, 158, 11, 0.5); }
+        .semaforo-glow-BAJO { box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); border-color: rgba(16, 185, 129, 0.5); }
+
+        .semaforo-text {
+            font-size: 2.8rem;
+            font-weight: 800;
+            font-family: 'Outfit', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .semaforo-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .text-ALTO { color: #EF4444 !important; text-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+        .text-MEDIO { color: #F59E0B !important; text-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
+        .text-BAJO { color: #10B981 !important; text-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+
         </style>
         """,
         unsafe_allow_html=True,
