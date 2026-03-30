@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+.streamlit/
+contratos_muestra/
+asistente-contratos.egg-info/
+dist/
+build/
+venv/
+.devcontainer/
