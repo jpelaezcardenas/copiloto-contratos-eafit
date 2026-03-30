@@ -1,106 +1,24 @@
-"""Módulo de detección y clasificación de riesgos legales."""
+"""Lógica para clasificar riesgos y determinar el semáforo final."""
 
-from config.settings import RISK_CATEGORIES
+def process_analysis_results(analysis_raw: dict) -> dict:
+    """Detecta riesgos adicionales y asigna colores al semáforo."""
+    
+    # Si viene con error del LLM, devolvemos eso
+    if analysis_raw.get("error"):
+        return analysis_raw
 
-
-def classify_risk_level(semaforo: str) -> dict:
-    """Devuelve la información visual del semáforo de riesgo.
-
-    Args:
-        semaforo: Nivel del semáforo (BAJO, MODERADO, ALTO).
-
-    Returns:
-        dict con color, emoji, label y descripción.
-    """
-    levels = {
-        "BAJO": {
-            "color": "#10b981",
-            "bg_color": "rgba(16, 185, 129, 0.15)",
-            "border_color": "rgba(16, 185, 129, 0.3)",
-            "emoji": "🟢",
-            "label": "Riesgo Bajo",
-            "description": "Contrato sólido con riesgos menores.",
-        },
-        "MODERADO": {
-            "color": "#f59e0b",
-            "bg_color": "rgba(245, 158, 11, 0.15)",
-            "border_color": "rgba(245, 158, 11, 0.3)",
-            "emoji": "🟡",
-            "label": "Riesgo Moderado",
-            "description": "Requiere revisión en algunos puntos clave.",
-        },
-        "ALTO": {
-            "color": "#ef4444",
-            "bg_color": "rgba(239, 68, 68, 0.15)",
-            "border_color": "rgba(239, 68, 68, 0.3)",
-            "emoji": "🔴",
-            "label": "Riesgo Alto",
-            "description": "Requiere atención inmediata. Riesgos críticos detectados.",
-        },
-    }
-    return levels.get(semaforo, levels["MODERADO"])
-
-
-def get_risk_stats(risks: list) -> dict:
-    """Calcula estadísticas de los riesgos detectados.
-
-    Args:
-        risks: Lista de riesgos del análisis.
-
-    Returns:
-        dict con conteos por nivel y categoría.
-    """
-    stats = {
-        "total": len(risks),
-        "por_nivel": {"ALTO": 0, "MEDIO": 0, "BAJO": 0, "NO_APLICA": 0},
-        "por_categoria": {},
-        "criticos": [],
-    }
-
-    for risk in risks:
-        nivel = risk.get("nivel", "MEDIO")
-        categoria = risk.get("categoria", "otro")
-
-        stats["por_nivel"][nivel] = stats["por_nivel"].get(nivel, 0) + 1
-        stats["por_categoria"][categoria] = stats["por_categoria"].get(categoria, 0) + 1
-
-        if nivel == "ALTO":
-            stats["criticos"].append(risk)
-
-    return stats
-
-
-def get_risk_category_info(categoria: str) -> dict:
-    """Obtiene la información de una categoría de riesgo.
-
-    Args:
-        categoria: Clave de la categoría.
-
-    Returns:
-        dict con la información de la categoría.
-    """
-    return RISK_CATEGORIES.get(
-        categoria,
-        {
-            "label": categoria.replace("_", " ").title(),
-            "icon": "⚪",
-            "description": "",
-            "referencia": "",
-        },
-    )
-
-
-def get_risk_nivel_badge(nivel: str) -> str:
-    """Devuelve un badge HTML para el nivel de riesgo."""
-    colors = {
-        "ALTO": ("#ef4444", "#fee2e2"),
-        "MEDIO": ("#f59e0b", "#fef3c7"),
-        "BAJO": ("#10b981", "#d1fae5"),
-        "NO_APLICA": ("#6b7280", "#f3f4f6"),
-    }
-    text_color, bg_color = colors.get(nivel, ("#6b7280", "#f3f4f6"))
-    return (
-        f'<span style="background:{bg_color}; color:{text_color}; '
-        f'padding:2px 10px; border-radius:12px; font-size:0.8em; '
-        f'font-weight:600;">{nivel}</span>'
-    )
+    riesgos = analysis_raw.get("riesgos", [])
+    
+    # Calcular nivel de severidad para el semáforo
+    severidad_max = "BAJO"
+    niveles_prioridad = {"ALTO": 3, "MEDIO": 2, "BAJO": 1}
+    
+    for r in riesgos:
+        nivel = r.get("nivel", "BAJO").upper()
+        if niveles_prioridad.get(nivel, 0) > niveles_prioridad.get(severidad_max, 0):
+            severidad_max = nivel
+            
+    # Inyectar el semáforo final en los datos
+    analysis_raw["semaforo"] = severidad_max
+    
+    return analysis_raw
