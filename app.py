@@ -29,11 +29,7 @@ from asistente_core.risk_detector import process_analysis_results
 apply_custom_styles()
 
 def main():
-    # ── BANNER INSTITUCIONAL ─────────────────────────────
-    st.markdown(
-        '<div style="text-align: center; margin-bottom: 1rem; color: #888; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px;">SECRETARÍA GENERAL | ASISTENTE LEGAL AI</div>', 
-        unsafe_allow_html=True
-    )
+    # ── BANNER INSTITUCIONAL ELIMINADO ─────────────────────────────
 
     # ── HERO SECTION ─────────────────────────────────────
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
