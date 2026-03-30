@@ -22,11 +22,6 @@ def _format_value(value):
 
 def render_dashboard(data):
     """Renderiza el tablero con estética institucional EAFIT."""
-    # Logo superior centrado
-    st.markdown('<div style="text-align: center; margin-bottom: 2rem;">', unsafe_allow_html=True)
-    st.image("LOGO EAFIT BLANCO.jpg", width=200)
-    st.markdown('</div>', unsafe_allow_html=True)
-
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
     st.markdown(f'<h1 class="main-title">Reporte de Análisis Legal</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">Secretaría General - Universidad EAFIT</p>', unsafe_allow_html=True)
