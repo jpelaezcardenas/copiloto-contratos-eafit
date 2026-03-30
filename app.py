@@ -2,6 +2,13 @@
 
 import streamlit as st
 import os
+import sys
+
+# Agregar el directorio actual al path para resolver módulos en Streamlit Cloud y Local
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
 from ui.styles import apply_custom_styles
 from ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer
 
