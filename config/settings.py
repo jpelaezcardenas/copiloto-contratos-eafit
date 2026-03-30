@@ -1,18 +1,24 @@
-"""Configuración centralizada del asistente de contratos."""
-
+import streamlit as st
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # ── API Keys ──────────────────────────────────────────────
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+# Intentar obtener de st.secrets (Nube) primero, luego de env (Local)
+def get_secret(key, default=""):
+    try:
+        return st.secrets.get(key, os.getenv(key, default))
+    except:
+        return os.getenv(key, default)
+
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
+DEEPSEEK_API_KEY = get_secret("DEEPSEEK_API_KEY")
+GROQ_API_KEY = get_secret("GROQ_API_KEY")
 
 # ── LLM Settings ─────────────────────────────────────────
-LLM_MODEL = "llama-3.3-70b-versatile"  # Modelo top en Groq (70 mil millones de parámetros)
-LLM_TEMPERATURE = 0.1 # Muy bajo para evitar alucinaciones legales
+LLM_MODEL = "llama-3.3-70b-versatile"
+LLM_TEMPERATURE = 0.1
 LLM_MAX_TOKENS = 8192
 GROQ_BASE_URL = "https://api.groq.com/openai/v1"
 
