@@ -78,3 +78,41 @@ def _parse_llm_response(raw_text: str) -> dict:
             "semaforo": "ALTO",
             "notas_adicionales": "Se requiere un nuevo análisis.",
         }
+
+
+def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
+    """Compara dos contratos usando Groq."""
+    from asistente_core.prompts import COMPARISON_PROMPT
+    client = get_client()
+
+    max_chars = 15_000 # Límite truncado menor ya que son dos textos
+    c1 = contract1_text[:max_chars] if len(contract1_text) > max_chars else contract1_text
+    c2 = contract2_text[:max_chars] if len(contract2_text) > max_chars else contract2_text
+
+    prompt = COMPARISON_PROMPT.replace("{contract_1}", c1).replace("{contract_2}", c2)
+
+    try:
+        response = client.chat.completions.create(
+            model=LLM_MODEL,
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": prompt},
+            ],
+            temperature=LLM_TEMPERATURE,
+            max_tokens=LLM_MAX_TOKENS,
+            response_format={"type": "json_object"}
+        )
+        
+        raw_text = response.choices[0].message.content.strip()
+        data = _parse_llm_response(raw_text)
+        if "error" in data and data["error"]:
+            # Customizing error default if parsing fails in comparison
+            return {
+                "diferencias": [],
+                "resumen_comparacion": "Error procesando comparación.",
+                "error": True
+            }
+        return data
+        
+    except Exception as e:
+        raise Exception(f"Error de comunicación con Groq (Comparación): {str(e)}")

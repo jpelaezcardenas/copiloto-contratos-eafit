@@ -1,5 +1,6 @@
 """Componentes premium de la interfaz de usuario estilo Apilex."""
 
+import json
 import streamlit as st
 
 def _format_value(value):
@@ -30,6 +31,7 @@ def render_dashboard(data):
     semaforo = data.get("semaforo", "BAJO").upper()
     label_map = {
         "ALTO": "RIESGO CRÍTICO DETECTADO",
+        "MODERADO": "RIESGO MODERADO - REVISIÓN REQUERIDA",
         "MEDIO": "RIESGO MODERADO - REVISIÓN REQUERIDA",
         "BAJO": "CONTRATO SEGURO - RIESGOS MÍNIMOS"
     }
@@ -83,7 +85,7 @@ def render_dashboard(data):
         st.success("✅ No se identificaron riesgos que requieran atención inmediata.")
     else:
         for r in riesgos:
-            nivel = r.get("nivel", "BAJO").upper()
+            nivel = r.get("level", r.get("nivel", "BAJO")).upper()
             st.markdown(f"""
             <div class="risk-card animated-card" style="border-left: 5px solid var(--accent-{nivel.lower() if nivel != 'ALTO' else 'red'});">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -98,14 +100,39 @@ def render_dashboard(data):
             </div>
             """, unsafe_allow_html=True)
 
+    # ── DESCARGA JSON ESTRUCTURADO ────────────────────────
+    st.markdown('<div style="text-align: center; margin-top: 3rem;">', unsafe_allow_html=True)
+    st.download_button(
+        label="📥 Descargar Análisis Completo (JSON)",
+        data=json.dumps(data, ensure_ascii=False, indent=2),
+        file_name="analisis_contrato_eafit.json",
+        mime="application/json",
+        use_container_width=False,
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
+
 def render_sidebar():
     """Barra lateral con identidad EAFIT."""
     with st.sidebar:
         st.image("LOGO EAFIT BLANCO.jpg", use_container_width=True)
         st.markdown("<hr style='border-color: rgba(255,255,255,0.1)'/>", unsafe_allow_html=True)
         st.markdown("### Ecosistema de Innovación Universidad EAFIT")
-        st.markdown("<p style='color: #A0A0A0; font-size: 0.85rem;'>Impulsando la eficiencia jurídica con inteligencia artificial</p>", unsafe_allow_html=True)
-        st.write("")
+        st.markdown("<p style='color: #A0A0A0; font-size: 0.85rem;'>Impulsando la eficiencia jurídica con IA</p>", unsafe_allow_html=True)
+        
+        # ── HISTORIAL DE SESIÓN ──
+        if "history" in st.session_state and st.session_state.history:
+            st.markdown("---")
+            st.markdown("#### 🕒 Historial de Análisis")
+            st.markdown("<p style='color: #A0A0A0; font-size: 0.8rem;'>Documentos evaluados hoy:</p>", unsafe_allow_html=True)
+            for idx, item in enumerate(reversed(st.session_state.history)):
+                # Mostrar botón para restaurar
+                # item["name"] tiene el nombre del doc o timestamp
+                if st.button(f"📄 {item['name'][:25]}...", key=f"hist_{idx}", use_container_width=True):
+                    st.session_state.analysis_complete = True
+                    st.session_state.analysis_data = item['data']
+                    st.session_state.comparison_complete = False
+                    st.rerun()
+                    
         st.markdown("---")
         st.markdown("#### Configuración")
         st.info("🤖 **Llama 3.3 (Groq)**")
@@ -121,3 +148,64 @@ def render_footer():
 def show_loading_animation():
     """Animación de carga personalizada."""
     return st.spinner("⚖️ Analizando normativa institucional... Detectando cláusulas de riesgo...")
+
+def render_comparison_dashboard(data, name1="Contrato 1", name2="Contrato 2"):
+    """Renderiza el tablero de comparación de dos contratos."""
+    st.markdown('<div class="hero-container">', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="main-title">Análisis Legal Comparativo</h1>', unsafe_allow_html=True)
+    st.markdown(f'<p class="subtitle">Contrastando: {name1} vs {name2}</p>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="risk-card animated-card">', unsafe_allow_html=True)
+    st.markdown(f'<h2 style="color: var(--accent-yellow); margin-bottom: 1.5rem;">Resumen de la Comparación</h2>', unsafe_allow_html=True)
+    st.markdown(f'<p style="color: var(--text-main); line-height: 1.8; font-size: 1.15rem;">{data.get("resumen_comparacion", "Sin resumen.")}</p>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    diferencias = data.get("diferencias", [])
+    if not diferencias:
+        st.info("No se encontraron diferencias reseñables entre los documentos.")
+    else:
+        st.markdown('<h2 style="margin-top: 3rem; margin-bottom: 2rem; color: #FFFFFF; font-family: Outfit; text-align: center;">Diferencias Clave Detectadas</h2>', unsafe_allow_html=True)
+        for diff in diferencias:
+            impacto = diff.get("impacto", "NEUTRO").upper()
+            
+            # Colores por impacto para EAFIT (Verde, Amarillo, Rojo/Naranja)
+            color_impacto = "var(--text-muted)"
+            if impacto == "FAVORABLE": color_impacto = "var(--accent-bajo)"
+            elif impacto == "DESFAVORABLE": color_impacto = "var(--accent-alto)"
+            
+            st.markdown(f"""
+            <div class="risk-card animated-card" style="border-left: 5px solid {color_impacto};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <strong style="color: white; font-size: 1.2rem;">{diff.get('aspecto', 'Diferencia')}</strong>
+                    <span style="background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; color: {color_impacto}; font-size: 0.8rem; font-weight: 800;">{impacto}</span>
+                </div>
+                
+                <div style="display: flex; gap: 20px; margin-bottom: 15px;">
+                    <div style="flex: 1; min-width: 0; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase;">Versión 1 ({name1[:15]})</span><br/>
+                        <span style="color: #ccc; font-size: 0.95rem;">{diff.get('contrato_1', '')}</span>
+                    </div>
+                    <div style="flex: 1; min-width: 0; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="color: #888; font-size: 0.8rem; text-transform: uppercase;">Versión 2 ({name2[:15]})</span><br/>
+                        <span style="color: #ccc; font-size: 0.95rem;">{diff.get('contrato_2', '')}</span>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(4, 31, 58, 0.4); border-radius: 8px; padding: 15px; border-left: 3px solid var(--accent-yellow);">
+                    <div style="color: var(--accent-yellow); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px;">Análisis e Implicaciones</div>
+                    <div style="font-size: 0.95rem; color: white;">{diff.get('comentario', '')}</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+    # ── DESCARGA JSON COMP ────────────────────────
+    st.markdown('<div style="text-align: center; margin-top: 3rem;">', unsafe_allow_html=True)
+    st.download_button(
+        label="📥 Descargar Comparación (JSON)",
+        data=json.dumps(data, ensure_ascii=False, indent=2),
+        file_name="comparacion_contratos_eafit.json",
+        mime="application/json",
+        use_container_width=False,
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
+

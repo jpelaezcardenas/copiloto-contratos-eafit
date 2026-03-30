@@ -198,11 +198,11 @@ def apply_custom_styles():
         }
 
         .semaforo-glow-ALTO { border-left: 8px solid #EF4444; background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%); }
-        .semaforo-glow-MEDIO { border-left: 8px solid #F59E0B; background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%); }
+        .semaforo-glow-MEDIO, .semaforo-glow-MODERADO { border-left: 8px solid #F59E0B; background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%); }
         .semaforo-glow-BAJO { border-left: 8px solid #10B981; background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%); }
 
         .text-ALTO { color: #EF4444 !important; }
-        .text-MEDIO { color: #F59E0B !important; }
+        .text-MEDIO, .text-MODERADO { color: #F59E0B !important; }
         .text-BAJO { color: #10B981 !important; }
 
         /* Sidebar Logo */

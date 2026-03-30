@@ -40,26 +40,15 @@ Extrae la siguiente información del contrato:
 - Lista las obligaciones del contratista
 - Identifica si hay desequilibrio en las obligaciones
 
-### Paso 3: Detección de Riesgos
-Evalúa cada categoría de riesgo y asigna un nivel (ALTO / MEDIO / BAJO / NO APLICA):
+### Paso 3: Detección de Riesgos Estratégicos
+Evalúa cada categoría de riesgo y asigna un nivel (ALTO / MEDIO / BAJO / NO APLICA). EXPANDE TU ANÁLISIS para buscar estos casos específicos:
 
-1. **Ambigüedad** (Art. 1624 Código Civil): ¿Hay términos vagos como "oportunamente", \
-"en la medida de lo posible", o descripciones de objeto sin determinación lícita?
-
-2. **Falta de Penalidades** (Art. 1592 Código Civil): ¿Se pactaron multas por mora? \
-¿Hay cláusula penal por incumplimiento definitivo? ¿Los montos son proporcionales?
-
-3. **Cláusulas Abusivas** (Art. 42 Ley 1480/2011): ¿Hay cláusulas que generen \
-desequilibrio injustificado? ¿Limitaciones excesivas de responsabilidad?
-
-4. **Ruptura de Equilibrio Contractual**: ¿Puede una parte terminar unilateralmente \
-sin indemnización justa? ¿Se permite modificar unilateralmente las condiciones?
-
-5. **Vigencia Inconsistente**: ¿Las fechas de ejecución son coherentes con la vigencia? \
-¿Hay renovación automática sin preaviso razonable?
-
-6. **Terminación Deficiente**: ¿Se definen causales de terminación con y sin justa causa? \
-¿Hay procedimiento de notificación? ¿Se regulan efectos post-contractuales?
+1. **Ambigüedad y Propiedad Intelectual** (Art. 1624 CC / PI): ¿Hay términos vagos? ¿Hay cesión total de propiedad intelectual (incluyendo desarrollos previos) sin compensación clara? ¿La confidencialidad es perpetua, general y sin límite temporal? ¿Hay licencia de software limitada o retención de código fuente por el proveedor?
+2. **Cláusulas Económicas y Penalidades** (Art. 1592 CC): ¿Las penalidades son asimétricas (altas para EAFIT, nulas para el contratista) o condicionadas asimétricamente? ¿Hay reajustes automáticos (ej. IPC + extras) o incrementos mínimos garantizados absurdos? ¿Se cobran recargos administrativos desproporcionados o costos de transición inflados? ¿Hay retención automática de dineros (depósitos)?
+3. **Cláusulas Abusivas y Renuncias Encubiertas** (Art. 42 Ley 1480): ¿Hay limitaciones de responsabilidad extremas para el proveedor (ej. limitadas a 3 meses de servicio)? ¿Hay renuncia a vicios ocultos? ¿El proveedor puede clasificar unilateralmente incidentes o usar datos para su propio modelo de IA o analytics sin anonimizar o de forma abusiva?
+4. **Jurisdicción y Procesal**: ¿Se pacta una jurisdicción distante, desfavorable o externa para resolver conflictos (ej. Bogotá o Cartagena en un contrato de Medellín)? ¿Hay obligación de asumir costos judiciales pase lo que pase?
+5. **Ruptura de Equilibrio y SLAs**: ¿El alcance del servicio/canon puede ser modificado unilateralmente por el proveedor/arrendador sin compensación o ajuste? ¿Los Acuerdos de Nivel de Servicio (SLA) son débiles, con múltiples exclusiones o penalidad mínima estricta y de difícil reclamo? ¿Hay cláusulas de no competencia desproporcionadas en tiempo/penalidad?
+6. **Vigencia y Terminación Asimétrica**: ¿Hay prórrogas automáticas agresivas (ej. aviso de 90/180 días)? ¿Para EAFIT la ventana de terminación es laxa, pero para liquidar el contrato exige meses de preaviso y multas de penalización exorbitantes?
 
 ### Paso 4: Resumen Ejecutivo
 Genera un resumen de máximo 120 palabras con los hallazgos más críticos.
@@ -96,7 +85,7 @@ Responde EXCLUSIVAMENTE con un JSON válido con la siguiente estructura exacta:
   },
   "riesgos": [
     {
-      "categoria": "ambiguedad|falta_penalidades|clausulas_abusivas|ruptura_equilibrio|vigencia_inconsistente|terminacion_deficiente",
+      "categoria": "ambiguedad_y_pi|clausulas_economicas_y_penalidades|clausulas_abusivas_y_renuncias|jurisdiccion_y_procesal|ruptura_equilibrio_y_slas|vigencia_y_terminacion",
       "level": "ALTO|MEDIO|BAJO|NO_APLICA",
       "descripcion": "Descripción específica del riesgo encontrado",
       "clausula_afectada": "Cita textual o referencia a la cláusula del contrato",
