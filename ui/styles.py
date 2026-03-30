@@ -11,15 +11,16 @@ def apply_custom_styles():
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
         :root {
-            --primary: #0066FF;
-            --primary-glow: rgba(0, 102, 255, 0.3);
-            --bg-dark: #0A0D14;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --primary: #003399; /* Azul EAFIT */
+            --primary-glow: rgba(0, 51, 153, 0.3);
+            --bg-dark: #000000; /* Fondo negro como en la web oficial */
+            --card-bg: rgba(255, 255, 255, 0.05);
             --text-main: #FFFFFF;
-            --text-muted: #94A3B8;
+            --text-muted: #A0A0A0;
             --border: rgba(255, 255, 255, 0.1);
+            --accent-blue: #003399;
+            --accent-yellow: #FFCC00; /* Oro EAFIT */
             --accent-green: #10B981;
-            --accent-yellow: #F59E0B;
             --accent-red: #EF4444;
         }
 
@@ -38,14 +39,14 @@ def apply_custom_styles():
 
         /* Hero Section */
         .hero-container {
-            padding: 4rem 1rem 2rem 1rem;
+            padding: 5rem 1rem 3rem 1rem;
             text-align: center;
-            background: radial-gradient(circle at 50% -20%, var(--primary-glow) 0%, transparent 70%);
+            background: linear-gradient(180deg, rgba(0, 51, 153, 0.15) 0%, transparent 100%);
         }
 
         .main-title {
             font-size: 3.5rem !important;
-            background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFCC00 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 1rem !important;
@@ -54,120 +55,113 @@ def apply_custom_styles():
         .subtitle {
             font-size: 1.25rem;
             color: var(--text-muted);
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto 2.5rem auto;
             line-height: 1.6;
         }
 
-        /* Botones estilo Apilex */
+        /* Botones estilo EAFIT */
         .stButton > button {
             background-color: var(--primary) !important;
             color: white !important;
-            border-radius: 50px !important;
-            padding: 0.75rem 2.5rem !important;
+            border-radius: 4px !important; /* Bordes más rectos/institucionales */
+            padding: 0.8rem 2.8rem !important;
             font-weight: 600 !important;
-            border: none !important;
-            box-shadow: 0 4px 14px 0 var(--primary-glow) !important;
-            transition: all 0.25s ease-in-out !important;
-            width: auto !important;
+            border: 1px solid var(--accent-yellow) !important;
+            transition: all 0.3s ease !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .stButton > button:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px 0 var(--primary-glow) !important;
-            opacity: 0.9 !important;
+            background-color: var(--accent-yellow) !important;
+            color: black !important;
+            transform: translateY(-2px);
         }
 
-        /* Tarjetas de Riesgo (Glassmorphism) */
+        /* Footer Institucional */
+        .eafit-footer {
+            background-color: #000000;
+            color: white;
+            padding: 4rem 2rem;
+            border-top: 1px solid #333;
+            margin-top: 5rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-col h4 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            border-bottom: 2px solid var(--accent-yellow);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .footer-col p {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
+            justify-content: center;
+            border-top: 1px solid #222;
+            padding-top: 2rem;
+        }
+
+        /* Tarjetas de Riesgo */
         .risk-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(10px);
-            transition: border-color 0.3s ease;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease;
         }
 
         .risk-card:hover {
-            border-color: var(--primary);
+            transform: scale(1.01);
+            border-color: var(--accent-yellow);
         }
 
-        .risk-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 0.8rem;
-        }
-
-        .risk-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .status-low { background-color: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
-        .status-medium { background-color: var(--accent-yellow); box-shadow: 0 0 10px var(--accent-yellow); }
-        .status-high { background-color: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
-
-        /* Widgets de Sidebar */
-        section[data-testid="stSidebar"] {
-            background-color: #05070A !important;
-            border-right: 1px solid var(--border) !important;
-        }
-
-        /* Ocultar elementos de Streamlit predeterminados */
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-
-        /* Animaciones suaves */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .animated-card {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        /* Semáforo Global Neón */
+        /* Semáforo Global */
         .semaforo-banner {
-            padding: 2.5rem;
-            border-radius: 24px;
+            padding: 3rem;
+            border-radius: 16px;
             text-align: center;
+            margin-bottom: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .semaforo-glow-ALTO { border-left: 8px solid #EF4444; background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%); }
+        .semaforo-glow-MEDIO { border-left: 8px solid #F59E0B; background: linear-gradient(90deg, rgba(245, 158, 11, 0.1) 0%, transparent 100%); }
+        .semaforo-glow-BAJO { border-left: 8px solid #10B981; background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%); }
+
+        .text-ALTO { color: #EF4444 !important; }
+        .text-MEDIO { color: #F59E0B !important; }
+        .text-BAJO { color: #10B981 !important; }
+
+        /* Sidebar Logo */
+        .sidebar-logo {
+            width: 100%;
             margin-bottom: 2rem;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(20px);
+            padding: 1rem;
         }
-
-        .semaforo-glow-ALTO { box-shadow: 0 0 50px rgba(239, 68, 68, 0.3); border-color: rgba(239, 68, 68, 0.5); }
-        .semaforo-glow-MEDIO { box-shadow: 0 0 50px rgba(245, 158, 11, 0.3); border-color: rgba(245, 158, 11, 0.5); }
-        .semaforo-glow-BAJO { box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); border-color: rgba(16, 185, 129, 0.5); }
-
-        .semaforo-text {
-            font-size: 2.8rem;
-            font-weight: 800;
-            font-family: 'Outfit', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin: 0;
-            line-height: 1;
-        }
-
-        .semaforo-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-
-        .text-ALTO { color: #EF4444 !important; text-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
-        .text-MEDIO { color: #F59E0B !important; text-shadow: 0 0 20px rgba(245, 158, 11, 0.6); }
-        .text-BAJO { color: #10B981 !important; text-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
 
         </style>
         """,
