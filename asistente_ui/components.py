@@ -111,38 +111,10 @@ def render_sidebar():
         st.info("🤖 **Llama 3.3 (Groq)**")
 
 def render_footer():
-    """Footer institucional basado en la imagen 'termina' con logos corregidos."""
-    logo_base64 = "https://www.eafit.edu.co/favicon.ico" # Fallback robusto
-    st.markdown(f"""
-    <div class="eafit-footer">
-        <div class="footer-grid">
-            <div class="footer-col">
-                <div style="font-size: 2rem; font-weight: 800; color: white; margin-bottom: 1rem; font-family: 'Outfit';">EAFIT</div>
-                <p>Universidad EAFIT</p>
-                <p style="font-size: 0.75rem; color: #777;">Personería Jurídica: Res. 75 del 28 de junio de 1960 - Mineducación.</p>
-            </div>
-            <div class="footer-col">
-                <h4 style="color: var(--accent-yellow)">EAFIT Medellín</h4>
-                <p>Carrera 49 N° 7 Sur-50</p>
-                <p>Línea nacional: 01 8000 515 900</p>
-                <p>PBX: (57) 604 2619500</p>
-            </div>
-            <div class="footer-col">
-                <h4 style="color: var(--accent-yellow)">Sedes Regionales</h4>
-                <p><strong>Bogotá:</strong> (57) 601 6114618</p>
-                <p><strong>Pereira:</strong> (57) 606 3214115</p>
-                <p><strong>Llanogrande:</strong> (57) 604 2619500 ext. 9188</p>
-            </div>
-            <div class="footer-col">
-                <h4 style="color: var(--accent-yellow)">Contacto</h4>
-                <p>Línea Nacional: 01 8000 515 900</p>
-                <p>WhatsApp: (57) 310 899 2908</p>
-                <p>Email: eafit@eafit.edu.co</p>
-            </div>
-        </div>
-        <div style="text-align: center; border-top: 1px solid #222; margin-top: 3rem; padding-top: 2rem;">
-            <p style="font-size: 0.8rem; color: #444;">© 2024 Universidad EAFIT - Medellín, Colombia</p>
-        </div>
+    """Footer institucional minimalista."""
+    st.markdown("""
+    <div style="text-align: center; color: #444; font-size: 0.70rem; padding: 1rem 0; margin-top: 2rem; border-top: 1px solid #222;">
+        &copy; 2024 Universidad EAFIT - Medellín, Colombia
     </div>
     """, unsafe_allow_html=True)
 

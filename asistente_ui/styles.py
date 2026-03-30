@@ -99,7 +99,7 @@ def apply_custom_styles():
 
         /* Drag and Drop Zone Ampliado */
         div[data-testid="stFileUploaderDropzone"] {
-            min-height: 250px !important;
+            min-height: 400px !important;
             display: flex;
             align-items: center;
             justify-content: center;
