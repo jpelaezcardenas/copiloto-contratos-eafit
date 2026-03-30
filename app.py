@@ -45,12 +45,15 @@ def main():
                     # 1. Extracción
                     text = extract_text_from_pdf(uploaded_file)
                     
-                    if not text.strip():
+                    # Asegurar que sea string para validación
+                    full_text = str(text) if isinstance(text, dict) else str(text)
+                    
+                    if not full_text.strip():
                         st.error("No se pudo extraer texto del archivo. ¿Es un PDF escaneado sin OCR?")
                         return
 
                     # 2. Análisis LLM (DeepSeek via Groq)
-                    analysis_raw = analyze_contract(text)
+                    analysis_raw = analyze_contract(full_text)
                     
                     # 3. Procesamiento de riesgos
                     final_data = process_analysis_results(analysis_raw)
