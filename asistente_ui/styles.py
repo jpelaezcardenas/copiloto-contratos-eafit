@@ -35,7 +35,7 @@ def apply_custom_styles():
 
         /* Reset general con fondo de imagen (Base64) */
         .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.96)), url("data:image/webp;base64,__BG_IMG_BASE64__") !important;
+            background-image: linear-gradient(to bottom, rgba(0, 15, 45, 0.5), rgba(0, 5, 15, 0.85)), url("data:image/webp;base64,__BG_IMG_BASE64__") !important;
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
