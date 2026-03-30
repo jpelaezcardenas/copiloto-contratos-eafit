@@ -76,6 +76,7 @@ def apply_custom_styles():
             max-width: 800px;
             margin: 0 auto 1.5rem auto;
             line-height: 1.5;
+            text-align: center;
         }
 
         /* Botones estilo EAFIT */
