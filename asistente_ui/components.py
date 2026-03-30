@@ -102,7 +102,6 @@ def render_sidebar():
     """Barra lateral con identidad EAFIT."""
     with st.sidebar:
         st.image("LOGO EAFIT BLANCO.jpg", use_container_width=True)
-        st.markdown("<div style='text-align: center; margin-top: -10px; margin-bottom: 20px;'><small style='color: #666;'>VIGILADA MINEDUCACIÓN</small></div>", unsafe_allow_html=True)
         st.markdown("<hr style='border-color: rgba(255,255,255,0.1)'/>", unsafe_allow_html=True)
         st.markdown("### Ecosistema de Innovación Universidad EAFIT")
         st.markdown("<p style='color: #A0A0A0; font-size: 0.85rem;'>Impulsando la eficiencia jurídica con inteligencia artificial</p>", unsafe_allow_html=True)
@@ -121,7 +120,6 @@ def render_footer():
                 <div style="font-size: 2rem; font-weight: 800; color: white; margin-bottom: 1rem; font-family: 'Outfit';">EAFIT</div>
                 <p>Universidad EAFIT</p>
                 <p style="font-size: 0.75rem; color: #777;">Personería Jurídica: Res. 75 del 28 de junio de 1960 - Mineducación.</p>
-                <p style="font-size: 0.75rem; color: #777;">VIGILADA MINEDUCACIÓN</p>
             </div>
             <div class="footer-col">
                 <h4 style="color: var(--accent-yellow)">EAFIT Medellín</h4>
