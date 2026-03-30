@@ -55,58 +55,77 @@ def apply_custom_styles():
             letter-spacing: -0.02em;
         }
 
-        /* Hero Section - Reducir el padding para evitar scroll */
+        /* Hero Section Premium con Glassmorphism */
         .hero-container {
-            padding: 1rem 1rem 1rem 1rem;
+            padding: 2rem;
             text-align: center;
-            background: linear-gradient(180deg, rgba(0, 51, 153, 0.15) 0%, transparent 100%);
+            background: linear-gradient(135deg, rgba(0, 51, 153, 0.25) 0%, rgba(0, 0, 0, 0.4) 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .main-title {
-            font-size: 3rem !important; /* Un poco más pequeño para ahorrar espacio */
+            font-size: 3.2rem !important; 
             background: linear-gradient(135deg, #FFFFFF 0%, #FFCC00 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem !important;
+            margin-bottom: 0.8rem !important;
+            filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.8));
         }
 
         .subtitle {
-            font-size: 1.1rem;
-            color: var(--text-muted);
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.85);
             max-width: 800px;
-            margin: 0 auto 1.5rem auto;
-            line-height: 1.5;
+            margin: 0 auto;
+            line-height: 1.6;
             text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
-        /* Botones estilo EAFIT */
+        /* Botones estilo EAFIT Premium */
         .stButton > button {
-            background-color: var(--primary) !important;
+            background: linear-gradient(135deg, var(--primary) 0%, #002266 100%) !important;
             color: white !important;
-            border-radius: 4px !important; /* Bordes más rectos/institucionales */
+            border-radius: 8px !important;
             padding: 0.8rem 2.8rem !important;
             font-weight: 600 !important;
-            border: 1px solid var(--accent-yellow) !important;
-            transition: all 0.3s ease !important;
+            border: 1px solid rgba(255, 204, 0, 0.5) !important;
+            box-shadow: 0 4px 15px rgba(0, 51, 153, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .stButton > button:hover {
-            background-color: var(--accent-yellow) !important;
-            color: black !important;
-            transform: translateY(-2px);
+            background: linear-gradient(135deg, #FFCC00 0%, #E6B800 100%) !important;
+            color: #000000 !important;
+            border: 1px solid #FFFFFF !important;
+            box-shadow: 0 6px 20px rgba(255, 204, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+            transform: translateY(-3px);
         }
 
-        /* Drag and Drop Zone Ampliado */
+        /* Drag and Drop Zone Premium 3D */
         div[data-testid="stFileUploaderDropzone"] {
             min-height: 400px !important;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: rgba(0, 51, 153, 0.1) !important;
-            border: 2px dashed var(--accent-yellow) !important;
-            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(0, 51, 153, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%) !important;
+            border: 2px dashed rgba(255, 204, 0, 0.6) !important;
+            border-radius: 16px;
+            box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        div[data-testid="stFileUploaderDropzone"]:hover {
+            border-color: var(--accent-yellow) !important;
+            background: linear-gradient(180deg, rgba(0, 51, 153, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%) !important;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.15), inset 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
         }
 
         /* Footer Institucional - Más compacto */
