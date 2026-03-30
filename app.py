@@ -32,12 +32,13 @@ def main():
     # ── BANNER INSTITUCIONAL ELIMINADO ─────────────────────────────
 
     # ── HERO SECTION ─────────────────────────────────────
-    st.markdown('<div class="hero-container">', unsafe_allow_html=True)
-    st.markdown('<h1 class="main-title">Asistente para Análisis de Contratos</h1>', unsafe_allow_html=True)
-    st.markdown(
-        '<p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>',
-        unsafe_allow_html=True
-    )
+    st.markdown("""
+        <div class="hero-container" style="text-align: center;">
+            <h1 class="main-title">Asistente para Análisis de Contratos</h1>
+            <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>
+        </div>
+        <div style="height: 4rem;"></div>
+    """, unsafe_allow_html=True)
     
     # ── ÁREA DE CARGA DE DOCUMENTOS ───────────────────────
     col_u1, col_u2, col_u3 = st.columns([1, 5, 1])
