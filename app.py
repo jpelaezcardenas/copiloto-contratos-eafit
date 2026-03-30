@@ -13,6 +13,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# ── LOGICA DE NEGOCIO ──────────────────────────────────
+from core.pdf_processor import extract_text_from_pdf
+from core.llm_engine import analyze_contract
+from core.risk_detector import process_analysis_results
+
 # 2. Aplicar estilos personalizados (Nueva identidad visual)
 apply_custom_styles()
 

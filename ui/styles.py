@@ -1,37 +1,47 @@
 """Sistema de diseño premium inspirado en Apilex.ai para el asistente legal."""
 
 import streamlit as st
+import base64
+import os
 
 def apply_custom_styles():
     """Inyecta el CSS personalizado para un look premium y moderno."""
+    # Intentar cargar imagen local como base64 para evitar errores de red
+    bg_img_base64 = ""
+    try:
+        with open("eafit-medellin.webp", "rb") as image_file:
+            bg_img_base64 = base64.b64encode(image_file.read()).decode()
+    except:
+        pass
+
     st.markdown(
-        """
+        f"""
         <style>
         /* Importar tipografía moderna */
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-        :root {
+        :root {{
             --primary: #003399; /* Azul EAFIT */
             --primary-glow: rgba(0, 51, 153, 0.3);
-            --bg-dark: #000000; /* Fondo negro como en la web oficial */
+            --bg-dark: #000000;
             --card-bg: rgba(255, 255, 255, 0.05);
             --text-main: #FFFFFF;
             --text-muted: #A0A0A0;
             --border: rgba(255, 255, 255, 0.1);
             --accent-blue: #003399;
-            --accent-yellow: #FFCC00; /* Oro EAFIT */
+            --accent-yellow: #FFCC00;
             --accent-green: #10B981;
             --accent-red: #EF4444;
-        }
+        }}
 
-        /* Reset general con fondo de imagen forzado */
-        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-            background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95)), url("https://www.eafit.edu.co/medios/institucional/PublishingImages/eafit-campus.jpg") !important;
+        /* Reset general con fondo de imagen (Base64) */
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
+            background-image: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.96)), url("data:image/webp;base64,{bg_img_base64}") !important;
             background-size: cover !important;
             background-position: center !important;
             background-attachment: fixed !important;
             background-color: black !important;
-        }
+        }}
 
         /* Limpiar fondos de contenedores internos */
         .main, .block-container {
