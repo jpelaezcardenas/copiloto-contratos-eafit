@@ -11,7 +11,7 @@ if current_dir not in sys.path:
 
 # 1. Configuración de página
 st.set_page_config(
-    page_title="Copiloto Jurídico EAFIT | AI Legal Assistant",
+    page_title="Asistente para Análisis de Contratos | EAFIT",
     page_icon="⚖️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -37,7 +37,7 @@ def main():
 
     # ── HERO SECTION ─────────────────────────────────────
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
-    st.markdown('<h1 class="main-title">EAFIT Legal Copilot</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-title">Asistente para Análisis de Contratos</h1>', unsafe_allow_html=True)
     st.markdown(
         '<p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>',
         unsafe_allow_html=True
