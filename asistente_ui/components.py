@@ -266,7 +266,7 @@ def render_evaluation_tab():
                 <p style="font-size: 0.9rem; color: #ccc;">{case['description']}</p>
             </div>
             """, unsafe_allow_html=True)
-            if st.button(f"Cargar {name.split(' ')[0]}", key=f"btn_demo_{i}", use_container_width=True):
+            if st.button(f"Cargar {name.split(' ')[0]}", key=f"btn_demo_{i}", width="stretch"):
                 st.session_state.pasted_text_demo = case['text']
                 st.session_state.demo_name = name
                 st.info(f"✅ Ejemplo '{name}' cargado en la pestaña 'Pegar Texto'. Ve allí para iniciar el análisis.")

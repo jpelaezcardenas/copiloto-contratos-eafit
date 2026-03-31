@@ -1,15 +1,15 @@
-"""Main application: Copiloto Jurídico EAFIT con diseño Premium Apilex.ai."""
-
-import streamlit as st
 import os
 import sys
 
-# Agregar el directorio actual al path para resolver módulos en Streamlit Cloud y Local
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.append(current_dir)
+# ── FORZAR DIRECTORIO RAÍZ (PARA DESPLIEGUE CLOUD) ──────────────────
+base_path = os.path.dirname(os.path.abspath(__file__))
+if base_path not in sys.path:
+    sys.path.insert(0, base_path)
 
-# 1. Configuración de página
+import streamlit as st
+import json
+
+# ── CONFIGURACIÓN DE PÁGINA (DEBE SER EL PRIMER COMANDO ST) ──────────────
 st.set_page_config(
     page_title="Asistente para Análisis de Contratos | EAFIT",
     page_icon="⚖️",
@@ -17,13 +17,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-from asistente_ui.styles import apply_custom_styles
-from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard, render_evaluation_tab
+from asistente_ui import (
+    apply_custom_styles, 
+    render_dashboard, render_sidebar, show_loading_animation, 
+    render_footer, render_comparison_dashboard, render_evaluation_tab
+)
 
 # ── LOGICA DE NEGOCIO (CON NOMBRES ÚNICOS) ──────────────────────
-from asistente_core.pdf_extractor import extract_text_from_pdf, sanitize_extracted_text
-from asistente_core.llm_analyzer import analyze_contract, compare_contracts
-from asistente_core.risk_detector import process_analysis_results
+from asistente_core import (
+    extract_text_from_pdf, sanitize_extracted_text,
+    analyze_contract, compare_contracts,
+    process_analysis_results
+)
 
 # 2. Aplicar estilos personalizados (Nueva identidad visual)
 apply_custom_styles()

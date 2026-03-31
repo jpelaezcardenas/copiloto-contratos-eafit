@@ -9,7 +9,10 @@ def apply_custom_styles():
     # Intentar cargar imagen local como base64 para evitar errores de red
     bg_img_base64 = ""
     try:
-        with open("eafit-medellin.webp", "rb") as image_file:
+        # Calcular ruta absoluta relativa a la raíz del proyecto
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        bg_path = os.path.join(base_dir, "eafit-medellin.webp")
+        with open(bg_path, "rb") as image_file:
             bg_img_base64 = base64.b64encode(image_file.read()).decode()
     except:
         pass
