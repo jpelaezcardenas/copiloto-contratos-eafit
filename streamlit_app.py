@@ -102,7 +102,7 @@ def main():
         col_b1, col_b2, col_b3 = st.columns([1, 1, 1])
         with col_b2:
             if has_pdf or has_text:
-                if st.button("🔍 INICIAR ANÁLISIS JURÍDICO", use_container_width=True, type="primary"):
+                if st.button("🔍 INICIAR ANÁLISIS JURÍDICO", width="stretch", type="primary"):
                     with show_loading_animation():
                         try:
                             # 1. Extracción según la fuente
@@ -137,7 +137,7 @@ def main():
                             st.error(f"❌ Error al analizar el contrato: {str(e)}")
 
             elif can_compare:
-                if st.button("⚖️ INICIAR COMPARACIÓN", use_container_width=True, type="primary"):
+                if st.button("⚖️ INICIAR COMPARACIÓN", width="stretch", type="primary"):
                     with show_loading_animation():
                         try:
                             # Extraer TXT 1

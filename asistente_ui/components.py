@@ -107,14 +107,14 @@ def render_dashboard(data):
         data=json.dumps(data, ensure_ascii=False, indent=2),
         file_name="analisis_contrato_eafit.json",
         mime="application/json",
-        use_container_width=False,
+        width="content",
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
 def render_sidebar():
     """Barra lateral con identidad EAFIT."""
     with st.sidebar:
-        st.image("LOGO EAFIT BLANCO.jpg", use_container_width=True)
+        st.image("LOGO EAFIT BLANCO.jpg", width="stretch")
         st.markdown("<hr style='border-color: rgba(255,255,255,0.1)'/>", unsafe_allow_html=True)
         st.markdown("### Ecosistema de Innovación Universidad EAFIT")
         st.markdown("<p style='color: #A0A0A0; font-size: 0.85rem;'>Impulsando la eficiencia jurídica con IA</p>", unsafe_allow_html=True)
@@ -127,7 +127,7 @@ def render_sidebar():
             for idx, item in enumerate(reversed(st.session_state.history)):
                 # Mostrar botón para restaurar
                 # item["name"] tiene el nombre del doc o timestamp
-                if st.button(f"📄 {item['name'][:25]}...", key=f"hist_{idx}", use_container_width=True):
+                if st.button(f"📄 {item['name'][:25]}...", key=f"hist_{idx}", width="stretch"):
                     st.session_state.analysis_complete = True
                     st.session_state.analysis_data = item['data']
                     st.session_state.comparison_complete = False
@@ -243,7 +243,7 @@ def render_comparison_dashboard(data, name1="Contrato 1", name2="Contrato 2"):
         data=json.dumps(data, ensure_ascii=False, indent=2),
         file_name="comparacion_contratos_eafit.json",
         mime="application/json",
-        use_container_width=False,
+        width="content",
     )
     st.markdown('</div>', unsafe_allow_html=True)
 
