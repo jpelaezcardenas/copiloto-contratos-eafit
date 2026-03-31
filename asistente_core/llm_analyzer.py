@@ -6,10 +6,8 @@ import streamlit as st
 import os
 from groq import Groq
 try:
-    from google import genai
-    from google.genai import types
+    import google.generativeai as genai
 except ImportError:
-    # Fallback si no está instalado el nuevo SDK
     pass
 
 from config.settings import LLM_MODEL, LLM_TEMPERATURE, LLM_MAX_TOKENS, RISK_CATEGORIES
@@ -20,19 +18,6 @@ def get_groq_client():
     if not api_key:
         return None
     return Groq(api_key=api_key)
-
-def get_gemini_client():
-    """Crea el cliente de Gemini (Google GenAI)."""
-    # Intentar obtener de secrets o de os.environ
-    gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
-    
-    if not gemini_key:
-        return None
-    try:
-        return genai.Client(api_key=gemini_key)
-    except Exception as e:
-        st.error(f"Error inicializando Gemini SDK: {str(e)}")
-        return None
 
 def analyze_contract(contract_text: str) -> dict:
     """Analiza un contrato con fallback dinámico entre Groq y Gemini."""
@@ -65,41 +50,29 @@ def analyze_contract(contract_text: str) -> dict:
             else:
                 st.info(f"Groq temporalmente fuera de línea, probando Gemini...")
 
-    # 2. Fallback a Gemini
-    gemini_client = get_gemini_client()
-    if gemini_client:
+    # 2. Fallback a Gemini (usando SDK estable)
+    gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
+    if gemini_key:
         try:
+            genai.configure(api_key=gemini_key)
+            # Gemini 1.5 Flash es el más estable y rápido para fallback
+            model = genai.GenerativeModel("gemini-1.5-flash")
             full_prompt = f"{SYSTEM_PROMPT}\n\n{prompt}"
-            # Probamos primero el 2.0 y si falla el 1.5 que es el estándar
-            try:
-                model_to_use = "gemini-2.0-flash"
-                response = gemini_client.models.generate_content(
-                    model=model_to_use,
-                    contents=full_prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=LLM_TEMPERATURE,
-                        max_output_tokens=LLM_MAX_TOKENS,
-                        response_mime_type="application/json"
-                    )
-                )
-            except:
-                model_to_use = "gemini-1.5-flash" # Fallback a 1.5 si 2.0 falla por región
-                response = gemini_client.models.generate_content(
-                    model=model_to_use,
-                    contents=full_prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=LLM_TEMPERATURE,
-                        max_output_tokens=LLM_MAX_TOKENS,
-                        response_mime_type="application/json"
-                    )
-                )
             
+            response = model.generate_content(
+                full_prompt,
+                generation_config=genai.types.GenerationConfig(
+                    temperature=LLM_TEMPERATURE,
+                    max_output_tokens=LLM_MAX_TOKENS,
+                    response_mime_type="application/json",
+                ),
+            )
             return _parse_llm_response(response.text)
         except Exception as ge:
-            st.error(f"Gemini falló también: {str(ge)}")
+            st.error(f"Gemini falló: {str(ge)}")
             raise Exception("No fue posible obtener respuesta de ningún motor inteligente.")
     
-    raise Exception("Límite de Groq alcanzado y no hay API Key de Gemini configurada.")
+    raise Exception("Límite de Groq alcanzado y Gemini no está configurado.")
 
 def _parse_llm_response(raw_text: str) -> dict:
     """Parsea la respuesta para asegurar un dict válido."""
@@ -121,7 +94,7 @@ def _parse_llm_response(raw_text: str) -> dict:
         
         return {
             "error": True,
-            "mensaje": "Respuesta no estructurada.",
+            "mensaje": "Formato JSON no válido.",
             "respuesta_cruda": raw_text[:2000],
             "semaforo": "ALTO",
         }
@@ -150,11 +123,13 @@ def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
         pass
 
     try:
-        client = get_gemini_client()
-        if client:
-            response = client.models.generate_content(
-                model="gemini-1.5-flash", contents=f"{SYSTEM_PROMPT}\n\n{prompt}",
-                config=types.GenerateContentConfig(response_mime_type="application/json")
+        gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
+        if gemini_key:
+            genai.configure(api_key=gemini_key)
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(
+                f"{SYSTEM_PROMPT}\n\n{prompt}",
+                generation_config={"response_mime_type": "application/json"}
             )
             return _parse_llm_response(response.text)
     except:
