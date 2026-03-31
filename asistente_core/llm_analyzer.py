@@ -52,7 +52,7 @@ def analyze_contract(contract_text: str) -> dict:
     if gemini_key:
         try:
             # URL oficial de la API de Gemini (v1)
-            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={gemini_key}"
             
             # Payload minimalista para evitar errores de campos desconocidos
             payload = {
@@ -127,7 +127,7 @@ def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
     try:
         gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
         if gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={gemini_key}"
             payload = {"contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n\n{prompt}"}]}]}
             response = requests.post(url, json=payload, timeout=60)
             if response.status_code == 200:
