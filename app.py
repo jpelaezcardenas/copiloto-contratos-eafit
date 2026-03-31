@@ -28,6 +28,41 @@ from asistente_core.risk_detector import process_analysis_results
 # 2. Aplicar estilos personalizados (Nueva identidad visual)
 apply_custom_styles()
 
+def check_password():
+    """Devuelve `True` si el usuario ingresa la contraseña correcta."""
+    # Si no hay contraseña configurada en secrets, permitir acceso (modo público/desarrollo)
+    if "APP_PASSWORD" not in st.secrets:
+        return True
+
+    def password_entered():
+        """Verifica si la contraseña ingresada es correcta."""
+        if st.session_state["pwd_input"] == st.secrets["APP_PASSWORD"]:
+            st.session_state["password_correct"] = True
+            del st.session_state["pwd_input"]  # Eliminar por seguridad
+        else:
+            st.session_state["password_correct"] = False
+
+    if st.session_state.get("password_correct", False):
+        return True
+
+    # Interfaz de login centralizada
+    st.markdown("<div style='height: 15vh;'></div>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("<div class='hero-container' style='text-align: center; padding: 2rem;'>", unsafe_allow_html=True)
+        st.markdown("<h2>🔒 Acceso Restringido</h2>", unsafe_allow_html=True)
+        st.markdown("<p>Por favor, ingresa la contraseña corporativa para usar el Asistente de Contratos.</p>", unsafe_allow_html=True)
+        st.text_input(
+            "Contraseña", type="password", on_change=password_entered, key="pwd_input"
+        )
+        if "password_correct" in st.session_state and not st.session_state["password_correct"]:
+            st.error("😕 Contraseña incorrecta. Inténtalo de nuevo.")
+        st.markdown("</div>", unsafe_allow_html=True)
+    return False
+
+if not check_password():
+    st.stop()
+
 def main():
     # ── ESPACIO SUPERIOR PARA DISTRIBUCIÓN VERTICAL ───
     st.markdown("<div style='height: 12vh;'></div>", unsafe_allow_html=True)
