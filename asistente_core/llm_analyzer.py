@@ -1,4 +1,4 @@
-"""Integración con LLM (Groq y Gemini como fallback) para análisis de contratos."""
+"""Integración con múltiples LLMs para máxima resiliencia (Groq, Cerebras, Mistral, Gemini, OpenRouter)."""
 
 import json
 import re
@@ -6,88 +6,128 @@ import streamlit as st
 import os
 import requests
 from groq import Groq
+from openai import OpenAI
 
-from config.settings import LLM_MODEL, LLM_TEMPERATURE, LLM_MAX_TOKENS, RISK_CATEGORIES
+from config.settings import LLM_MODEL, LLM_TEMPERATURE, LLM_MAX_TOKENS
 
-def get_groq_client():
-    """Crea el cliente de Groq (Nativo)."""
-    api_key = st.secrets.get("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY")
-    if not api_key:
-        return None
-    return Groq(api_key=api_key)
-
-def analyze_contract(contract_text: str) -> dict:
-    """Analiza un contrato con fallback dinámico entre Groq y Gemini (REST API)."""
-    from asistente_core.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT
+def get_ai_response(prompt: str, system_prompt: str, is_json: bool = True) -> dict:
+    """Intenta obtener una respuesta de múltiples proveedores de IA en orden de prioridad."""
     
-    max_chars = 30_000
-    if len(contract_text) > max_chars:
-        contract_text = contract_text[:max_chars] + "\n\n[... DOCUMENTO TRUNCADO ...]"
-    prompt = ANALYSIS_PROMPT.replace("{{CONTRACT_TEXT}}", contract_text)
+    # Lista de proveedores configurados por prioridad y fiabilidad
+    providers = [
+        {
+            "name": "Groq (Primario)",
+            "key": st.secrets.get("GROQ_API_KEY") or os.environ.get("GROQ_API_KEY"),
+            "type": "groq",
+            "model": LLM_MODEL
+        },
+        {
+            "name": "Cerebras (Respaldo Ultra-Rápido)",
+            "key": st.secrets.get("CEREBRAS_API_KEY") or os.environ.get("CEREBRAS_API_KEY"),
+            "type": "openai_compat",
+            "base_url": "https://api.cerebras.ai/v1",
+            "model": "llama-3.3-70b"
+        },
+        {
+            "name": "Mistral (Análisis Jurídico)",
+            "key": st.secrets.get("MISTRAL_API_KEY") or os.environ.get("MISTRAL_API_KEY"),
+            "type": "openai_compat",
+            "base_url": "https://api.mistral.ai/v1",
+            "model": "mistral-large-latest"
+        },
+        {
+            "name": "Gemini 2.0 (Respaldo Google)",
+            "key": st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY"),
+            "type": "gemini_rest",
+            "model": "gemini-2.0-flash"
+        },
+        {
+            "name": "OpenRouter (Seguro Final)",
+            "key": st.secrets.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_API_KEY"),
+            "type": "openai_compat",
+            "base_url": "https://openrouter.ai/api/v1",
+            "model": "meta-llama/llama-3.3-70b-instruct"
+        }
+    ]
 
-    # 1. Intentar con Groq
-    groq_client = get_groq_client()
-    if groq_client:
+    for p in providers:
+        if not p["key"]:
+            continue
+            
         try:
-            response = groq_client.chat.completions.create(
-                model=LLM_MODEL,
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=LLM_TEMPERATURE,
-                max_tokens=LLM_MAX_TOKENS,
-                response_format={"type": "json_object"}
-            )
-            return _parse_llm_response(response.choices[0].message.content.strip())
+            # st.info(f"Probando {p['name']}...") # Opcional: Para debug interno
+            
+            if p["type"] == "groq":
+                client = Groq(api_key=p["key"])
+                response = client.chat.completions.create(
+                    model=p["model"],
+                    messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}],
+                    temperature=LLM_TEMPERATURE,
+                    max_tokens=LLM_MAX_TOKENS,
+                    response_format={"type": "json_object"} if is_json else None
+                )
+                return _parse_llm_response(response.choices[0].message.content.strip())
+
+            elif p["type"] == "openai_compat":
+                client = OpenAI(api_key=p["key"], base_url=p["base_url"])
+                response = client.chat.completions.create(
+                    model=p["model"],
+                    messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": prompt}],
+                    temperature=LLM_TEMPERATURE,
+                    max_tokens=LLM_MAX_TOKENS
+                )
+                return _parse_llm_response(response.choices[0].message.content.strip())
+
+            elif p["type"] == "gemini_rest":
+                url = f"https://generativelanguage.googleapis.com/v1/models/{p['model']}:generateContent?key={p['key']}"
+                payload = {"contents": [{"parts": [{"text": f"{system_prompt}\n\n{prompt}"}]}]}
+                res = requests.post(url, json=payload, timeout=60)
+                if res.status_code == 200:
+                    raw_text = res.json()['candidates'][0]['content']['parts'][0]['text']
+                    return _parse_llm_response(raw_text)
+                else:
+                    raise Exception(f"Error Gemini REST: {res.status_code}")
+
         except Exception as e:
             msg = str(e).lower()
             if "429" in msg or "rate_limit" in msg:
-                st.warning("⚠️ Límite de Groq alcanzado. Cambiando automáticamente a motor secundario (Gemini)...")
+                st.warning(f"⚠️ Límite de {p['name']} alcanzado. Cambiando de motor...")
             else:
-                st.info(f"Groq temporalmente fuera de línea, probando Gemini...")
+                # Ocultar errores técnicos menores para no asustar al usuario
+                pass
+            continue
 
-    # 2. Fallback a Gemini (REST API Ultra-minimalista)
-    gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
-    if gemini_key:
-        try:
-            # URL oficial de la API de Gemini (v1)
-            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={gemini_key}"
-            
-            # Payload minimalista para evitar errores de campos desconocidos
-            payload = {
-                "contents": [{
-                    "parts": [{"text": f"{SYSTEM_PROMPT}\n\n{prompt}"}]
-                }]
-            }
-            
-            headers = {'Content-Type': 'application/json'}
-            response = requests.post(url, headers=headers, json=payload, timeout=60)
-            
-            if response.status_code == 200:
-                result = response.json()
-                raw_text = result['candidates'][0]['content']['parts'][0]['text']
-                return _parse_llm_response(raw_text)
-            else:
-                st.error(f"Error de API Gemini ({response.status_code}): {response.text}")
-                raise Exception("Falla crítica en motor secundario.")
-                    
-        except Exception as ge:
-            st.error(f"Gemini (Native) falló: {str(ge)}")
-            raise Exception("Ningún motor inteligente pudo procesar el contrato.")
+    raise Exception("Ningún motor de IA pudo completar la solicitud. Verifica tus API Keys.")
+
+def analyze_contract(contract_text: str) -> dict:
+    """Punto de entrada principal para análisis de contratos."""
+    from asistente_core.prompts import SYSTEM_PROMPT, ANALYSIS_PROMPT
     
-    raise Exception("Límite de Groq alcanzado y Gemini no está configurado.")
+    max_chars = 40_000 # Cerebras y Gemini soportan mucho más
+    text = contract_text[:max_chars] if len(contract_text) > max_chars else contract_text
+    prompt = ANALYSIS_PROMPT.replace("{{CONTRACT_TEXT}}", text)
+
+    return get_ai_response(prompt, SYSTEM_PROMPT, is_json=True)
+
+def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
+    """Punto de entrada para comparación de contratos."""
+    from asistente_core.prompts import SYSTEM_PROMPT, COMPARISON_PROMPT
+    
+    max_chars = 15_000 
+    c1 = contract1_text[:max_chars] if len(contract1_text) > max_chars else contract1_text
+    c2 = contract2_text[:max_chars] if len(contract2_text) > max_chars else contract2_text
+    prompt = COMPARISON_PROMPT.replace("{contract_1}", c1).replace("{contract_2}", c2)
+
+    return get_ai_response(prompt, SYSTEM_PROMPT, is_json=True)
 
 def _parse_llm_response(raw_text: str) -> dict:
-    """Parsea la respuesta para asegurar un dict válido."""
+    """Parsea la respuesta para asegurar un dict válido, eliminando markdown si existe."""
     try:
-        # Limpieza de markdown
         clean = re.sub(r"^```(?:json)?\s*\n?", "", raw_text)
         clean = re.sub(r"\n?```\s*$", "", clean)
         clean = clean.strip()
         return json.loads(clean)
     except json.JSONDecodeError:
-        # Intento de extracción por regex por si el JSON viene sucio
         match = re.search(r"(\{[\s\S]*\})", raw_text)
         if match:
             try:
@@ -98,42 +138,6 @@ def _parse_llm_response(raw_text: str) -> dict:
         return {
             "error": True,
             "mensaje": "Respuesta no estructurada.",
-            "respuesta_cruda": raw_text[:2000],
+            "respuesta_cruda": raw_text[:1000],
             "semaforo": "ALTO",
         }
-
-def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
-    """Compara dos contratos usando Groq o Gemini Nativo."""
-    from asistente_core.prompts import SYSTEM_PROMPT, COMPARISON_PROMPT
-    
-    max_chars = 15_000 
-    c1 = contract1_text[:max_chars] if len(contract1_text) > max_chars else contract1_text
-    c2 = contract2_text[:max_chars] if len(contract2_text) > max_chars else contract2_text
-    prompt = COMPARISON_PROMPT.replace("{contract_1}", c1).replace("{contract_2}", c2)
-
-    try:
-        client = get_groq_client()
-        if client:
-            response = client.chat.completions.create(
-                model=LLM_MODEL,
-                messages=[{"role": "system", "content": SYSTEM_PROMPT},{"role": "user", "content": prompt}],
-                temperature=LLM_TEMPERATURE, max_tokens=LLM_MAX_TOKENS,
-                response_format={"type": "json_object"}
-            )
-            return _parse_llm_response(response.choices[0].message.content.strip())
-    except:
-        pass
-
-    try:
-        gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
-        if gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key={gemini_key}"
-            payload = {"contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n\n{prompt}"}]}]}
-            response = requests.post(url, json=payload, timeout=60)
-            if response.status_code == 200:
-                raw_text = response.json()['candidates'][0]['content']['parts'][0]['text']
-                return _parse_llm_response(raw_text)
-    except:
-        pass
-
-    return {"error": True, "mensaje": "Comparación no disponible."}
