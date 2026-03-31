@@ -47,22 +47,18 @@ def analyze_contract(contract_text: str) -> dict:
             else:
                 st.info(f"Groq temporalmente fuera de línea, probando Gemini...")
 
-    # 2. Fallback a Gemini (usando REST API Nativa para evitar errores 404 de SDK)
+    # 2. Fallback a Gemini (REST API Ultra-minimalista)
     gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
     if gemini_key:
         try:
-            # URL oficial de la API de Gemini (v1beta es la más estable para modelos Flash nuevos)
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            # URL oficial de la API de Gemini (v1)
+            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_key}"
             
+            # Payload minimalista para evitar errores de campos desconocidos
             payload = {
                 "contents": [{
                     "parts": [{"text": f"{SYSTEM_PROMPT}\n\n{prompt}"}]
-                }],
-                "generationConfig": {
-                    "temperature": LLM_TEMPERATURE,
-                    "maxOutputTokens": LLM_MAX_TOKENS,
-                    "responseMimeType": "application/json"
-                }
+                }]
             }
             
             headers = {'Content-Type': 'application/json'}
@@ -70,20 +66,11 @@ def analyze_contract(contract_text: str) -> dict:
             
             if response.status_code == 200:
                 result = response.json()
-                # La estructura de Gemini es: candidates[0].content.parts[0].text
                 raw_text = result['candidates'][0]['content']['parts'][0]['text']
                 return _parse_llm_response(raw_text)
             else:
-                # Si falla v1beta, intentamos con v1 (estándar)
-                url_v1 = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_key}"
-                response = requests.post(url_v1, headers=headers, json=payload, timeout=60)
-                if response.status_code == 200:
-                    result = response.json()
-                    raw_text = result['candidates'][0]['content']['parts'][0]['text']
-                    return _parse_llm_response(raw_text)
-                else:
-                    st.error(f"Error de API Gemini ({response.status_code}): {response.text}")
-                    raise Exception("Falla crítica en motor secundario.")
+                st.error(f"Error de API Gemini ({response.status_code}): {response.text}")
+                raise Exception("Falla crítica en motor secundario.")
                     
         except Exception as ge:
             st.error(f"Gemini (Native) falló: {str(ge)}")
@@ -94,11 +81,13 @@ def analyze_contract(contract_text: str) -> dict:
 def _parse_llm_response(raw_text: str) -> dict:
     """Parsea la respuesta para asegurar un dict válido."""
     try:
+        # Limpieza de markdown
         clean = re.sub(r"^```(?:json)?\s*\n?", "", raw_text)
         clean = re.sub(r"\n?```\s*$", "", clean)
         clean = clean.strip()
         return json.loads(clean)
     except json.JSONDecodeError:
+        # Intento de extracción por regex por si el JSON viene sucio
         match = re.search(r"(\{[\s\S]*\})", raw_text)
         if match:
             try:
@@ -122,7 +111,6 @@ def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
     c2 = contract2_text[:max_chars] if len(contract2_text) > max_chars else contract2_text
     prompt = COMPARISON_PROMPT.replace("{contract_1}", c1).replace("{contract_2}", c2)
 
-    # Lógica simplificada: Groq -> Gemini (Native)
     try:
         client = get_groq_client()
         if client:
@@ -139,11 +127,8 @@ def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
     try:
         gemini_key = st.secrets.get("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY")
         if gemini_key:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={gemini_key}"
-            payload = {
-                "contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n\n{prompt}"}]}],
-                "generationConfig": {"responseMimeType": "application/json"}
-            }
+            url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={gemini_key}"
+            payload = {"contents": [{"parts": [{"text": f"{SYSTEM_PROMPT}\n\n{prompt}"}]}]}
             response = requests.post(url, json=payload, timeout=60)
             if response.status_code == 200:
                 raw_text = response.json()['candidates'][0]['content']['parts'][0]['text']
