@@ -1,0 +1,2 @@
+﻿origin	https://github.com/jpelaezcardenas/copiloto-contratos-eafit.git (fetch)
+origin	https://github.com/jpelaezcardenas/copiloto-contratos-eafit.git (push)

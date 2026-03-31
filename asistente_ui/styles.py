@@ -14,9 +14,10 @@ def apply_custom_styles():
         bg_path = os.path.join(base_dir, "eafit-medellin.webp")
         with open(bg_path, "rb") as image_file:
             bg_img_base64 = base64.b64encode(image_file.read()).decode()
-    except:
+    except Exception:
         pass
 
+    # Usar comillas triples simples para evitar que Python intente parsear {} como variables f-string
     css_content = """
         <style>
         /* Importar tipografía moderna */

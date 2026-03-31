@@ -17,20 +17,16 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-from asistente_ui import (
-    apply_custom_styles, 
-    render_dashboard, render_sidebar, show_loading_animation, 
-    render_footer, render_comparison_dashboard, render_evaluation_tab
-)
+# IMPORTACIONES LOCALES (Deben coincidir con los nombres de las carpetas)
+from asistente_ui.styles import apply_custom_styles
+from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard, render_evaluation_tab
 
-# ── LOGICA DE NEGOCIO (CON NOMBRES ÚNICOS) ──────────────────────
-from asistente_core import (
-    extract_text_from_pdf, sanitize_extracted_text,
-    analyze_contract, compare_contracts,
-    process_analysis_results
-)
+# ── LOGICA DE NEGOCIO ──────────────────────────────────────────
+from asistente_core.pdf_extractor import extract_text_from_pdf, sanitize_extracted_text
+from asistente_core.llm_analyzer import analyze_contract, compare_contracts
+from asistente_core.risk_detector import process_analysis_results
 
-# 2. Aplicar estilos personalizados (Nueva identidad visual)
+# 2. Aplicar estilos personalizados
 apply_custom_styles()
 
 def check_password():

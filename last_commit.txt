@@ -1,0 +1,9 @@
+﻿commit c78fddbb0505fc2ad0a70ade3b56468949832506
+Author: jpelaezcardenas <jpelaezcardenas@gmail.com>
+Date:   Mon Mar 30 19:13:44 2026 -0500
+
+    Fix deprecation warnings and ensure styles.py does not use f-string
+
+ asistente_ui/components.py | 8 ++++----
+ streamlit_app.py           | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
