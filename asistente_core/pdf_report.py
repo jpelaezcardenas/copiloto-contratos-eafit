@@ -299,4 +299,4 @@ def generate_pdf_report(data: dict) -> bytes:
         fill=True
     )
 
-    return pdf.output()
+    return bytes(pdf.output())
