@@ -50,7 +50,7 @@ class ContractReportPDF(FPDF):
         self.cell(0, 8, 'UNIVERSIDAD EAFIT - Secretaria General', 0, 0, 'L')
         self.set_font('Helvetica', '', 8)
         self.set_text_color(120, 120, 120)
-        self.cell(0, 8, 'Copiloto Juridico Inteligente', 0, 1, 'R')
+        self.cell(0, 8, 'Asistente Juridico para Analisis Contractual', 0, 1, 'R')
         self.set_draw_color(0, 51, 153)
         self.set_line_width(0.5)
         self.line(10, 18, 200, 18)
@@ -127,7 +127,7 @@ def generate_pdf_report(data: dict) -> bytes:
     # ── TITULO PRINCIPAL ──
     pdf.set_font('Helvetica', 'B', 20)
     pdf.set_text_color(0, 51, 153)
-    pdf.cell(0, 12, 'REPORTE DE ANALISIS LEGAL', 0, 1, 'C')
+    pdf.cell(0, 12, 'REPORTE DE ANALISIS CONTRACTUAL', 0, 1, 'C')
     pdf.set_font('Helvetica', '', 11)
     pdf.set_text_color(100, 100, 100)
     pdf.cell(0, 7, 'Secretaria General - Universidad EAFIT', 0, 1, 'C')
@@ -291,7 +291,7 @@ def generate_pdf_report(data: dict) -> bytes:
     pdf.set_font('Helvetica', 'I', 8)
     pdf.set_text_color(100, 100, 100)
     pdf.multi_cell(0, 4,
-        'AVISO LEGAL: Este reporte fue generado por el Copiloto Juridico Inteligente de la '
+        'AVISO LEGAL: Este reporte fue generado por el Asistente Juridico para Analisis Contractual de la '
         'Universidad EAFIT como herramienta de apoyo para la Secretaria General. '
         'Los resultados son orientativos y no constituyen concepto juridico vinculante. '
         'Todo analisis requiere validacion por un profesional del derecho. '

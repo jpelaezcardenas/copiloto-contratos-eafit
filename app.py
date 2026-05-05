@@ -12,7 +12,7 @@ import json
 
 # ── CONFIGURACIÓN DE PÁGINA (DEBE SER EL PRIMER COMANDO ST) ──────────────
 st.set_page_config(
-    page_title="Asistente para Análisis de Contratos | EAFIT",
+    page_title="Asistente jurídico para análisis contractual | EAFIT",
     page_icon="⚖️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -53,7 +53,7 @@ def check_password():
     with col2:
         st.markdown("<div class='hero-container' style='text-align: center; padding: 2rem;'>", unsafe_allow_html=True)
         st.markdown("<h2>🔒 Acceso Restringido</h2>", unsafe_allow_html=True)
-        st.markdown("<p>Por favor, ingresa la contraseña corporativa para usar el Asistente de Contratos.</p>", unsafe_allow_html=True)
+        st.markdown("<p>Por favor, ingresa la contraseña corporativa para usar el Asistente jurídico para análisis contractual.</p>", unsafe_allow_html=True)
         st.text_input(
             "Contraseña", type="password", on_change=password_entered, key="pwd_input"
         )
@@ -75,7 +75,7 @@ def main():
         # ── HERO SECTION ─────────────────────────────────────
         st.markdown("""
             <div class="hero-container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                <h1 class="main-title">Asistente análisis contratos</h1>
+                <h1 class="main-title">Asistente jurídico para análisis contractual</h1>
                 <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales o comparativos en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>
             </div>
             <div style="height: 1rem;"></div>

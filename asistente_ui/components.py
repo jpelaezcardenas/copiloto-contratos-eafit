@@ -2,6 +2,8 @@
 
 import json
 import streamlit as st
+import base64
+import os
 
 def _format_value(value):
     """Limpia valores para mostrarlos de forma elegante en la UI."""
@@ -24,7 +26,7 @@ def _format_value(value):
 def render_dashboard(data, analysis_time=None):
     """Renderiza el tablero con estética institucional EAFIT."""
     st.markdown('<div class="hero-container">', unsafe_allow_html=True)
-    st.markdown(f'<h1 class="main-title">Reporte de Análisis Legal</h1>', unsafe_allow_html=True)
+    st.markdown(f'<h1 class="main-title">Reporte de Análisis Contractual</h1>', unsafe_allow_html=True)
     st.markdown('<p class="subtitle">Secretaría General - Universidad EAFIT</p>', unsafe_allow_html=True)
     
     # ── SEMÁFORO GLOBAL ──────────────────
@@ -298,10 +300,67 @@ neutraliza **7 patrones de ataque** antes de que lleguen al LLM.
 """, unsafe_allow_html=True)
 
 def render_footer():
-    """Footer institucional minimalista."""
-    st.markdown("""
-    <div style="text-align: center; color: #444; font-size: 0.70rem; padding: 1rem 0; margin-top: 2rem; border-top: 1px solid #222;">
-        &copy; 2026 Universidad EAFIT - Medellín, Colombia | Copiloto Jurídico IA — Equipo Antigravity
+    """Footer institucional completo siguiendo el diseño de EAFIT."""
+    # Intentar cargar el logo para embeberlo en base64
+    logo_html = ""
+    try:
+        # LOGO EAFIT NEGRO.jpg es el que tiene texto blanco sobre fondo negro
+        logo_path = "LOGO EAFIT NEGRO.jpg"
+        if os.path.exists(logo_path):
+            with open(logo_path, "rb") as f:
+                logo_data = base64.b64encode(f.read()).decode()
+                logo_html = f'<img src="data:image/jpeg;base64,{logo_data}" style="height: 60px; margin-bottom: 2.5rem; filter: brightness(1.2);">'
+        else:
+            logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
+    except Exception:
+        logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
+
+    st.markdown(f"""
+    <div style="background-color: #000; color: #fff; padding: 4rem 2rem 2rem 2rem; margin-top: 5rem; border-top: 1px solid #333; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
+        <div style="text-align: center; width: 100%;">
+            {logo_html}
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1100px; margin: 0 auto; gap: 3rem;">
+            <!-- Columna 1 -->
+            <div style="flex: 1; min-width: 200px;">
+                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Virtual EAFIT</h3>
+                <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
+                    <li>¿Por qué estudiar en EAFIT?</li>
+                    <li>¿Qué quieres estudiar?</li>
+                </ul>
+            </div>
+            
+            <!-- Columna 2 -->
+            <div style="flex: 1; min-width: 200px;">
+                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Consultar aquí</h3>
+                <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
+                    <li>Política de protección de datos</li>
+                    <li>Políticas de cookies</li>
+                    <li>Políticas de cancelación y devolución</li>
+                </ul>
+            </div>
+            
+            <!-- Columna 3 -->
+            <div style="flex: 1; min-width: 200px;">
+                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Contáctanos</h3>
+                <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
+                    <li>Tel: (60) (4) 2619500 opción 1 - opción 3</li>
+                    <li>WhatsApp: +57 310 8992908</li>
+                    <li>Email: inscripciones-ep@eafit.edu.co</li>
+                    <li>Déjanos tus datos</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid #222; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #555; gap: 1rem;">
+            <div style="max-width: 600px;">
+                Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
+            </div>
+            <div style="text-align: right;">
+                &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 

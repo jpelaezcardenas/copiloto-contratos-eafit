@@ -11,7 +11,7 @@ import json
 
 # ── CONFIGURACIÓN DE PÁGINA (DEBE SER EL PRIMER COMANDO ST) ──────────────
 st.set_page_config(
-    page_title="Asistente para Análisis de Contratos | EAFIT",
+    page_title="Asistente jurídico para análisis contractual | EAFIT",
     page_icon="⚖️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -19,7 +19,7 @@ st.set_page_config(
 
 # IMPORTACIONES LOCALES (Deben coincidir con los nombres de las carpetas)
 from asistente_ui.styles import apply_custom_styles
-from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard, render_evaluation_tab
+from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard
 
 # ── LOGICA DE NEGOCIO ──────────────────────────────────────────
 from asistente_core.pdf_extractor import extract_text_from_pdf, sanitize_extracted_text
@@ -52,7 +52,7 @@ def check_password():
     with col2:
         st.markdown("<div class='hero-container' style='text-align: center; padding: 2rem;'>", unsafe_allow_html=True)
         st.markdown("<h2>🔒 Acceso Restringido</h2>", unsafe_allow_html=True)
-        st.markdown("<p>Por favor, ingresa la contraseña corporativa para usar el Asistente de Contratos.</p>", unsafe_allow_html=True)
+        st.markdown("<p>Por favor, ingresa la contraseña corporativa para usar el Asistente jurídico para análisis contractual.</p>", unsafe_allow_html=True)
         st.text_input(
             "Contraseña", type="password", on_change=password_entered, key="pwd_input"
         )
@@ -74,14 +74,14 @@ def main():
         # ── HERO SECTION ─────────────────────────────────────
         st.markdown("""
             <div class="hero-container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
-                <h1 class="main-title">Asistente análisis contratos</h1>
+                <h1 class="main-title">Asistente jurídico para análisis contractual</h1>
                 <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales o comparativos en segundos. Acelera la revisión documental y optimiza los procesos legales de la Universidad.</p>
             </div>
             <div style="height: 1rem;"></div>
         """, unsafe_allow_html=True)
         
         # ── TABS: PDF, Texto, Comparar, Evaluar ──────────────────────
-        tab_pdf, tab_text, tab_compare, tab_eval = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos", "🎯 Evaluar Detección"])
+        tab_pdf, tab_text, tab_compare = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos"])
 
         with tab_pdf:
             uploaded_file = st.file_uploader(
@@ -119,8 +119,6 @@ def main():
                 comp_file2 = st.file_uploader("PDF 2", type=["pdf"], key="comp_file2")
                 comp_text2 = st.text_area("O pega el texto 2", height=150, key="comp_text2")
 
-        with tab_eval:
-            render_evaluation_tab()
 
     # Renderizar Sidebar (incluye historial)
     render_sidebar()
