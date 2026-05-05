@@ -316,32 +316,89 @@ def render_footer():
         logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
 
     footer_html = f"""
-<div style="background-color: #000; color: #fff; padding: 40px 20px; border-top: 1px solid #333; font-family: sans-serif; min-height: 400px;">
-    <div style="text-align: center; width: 100%;">
-        {logo_html}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+    body {{ 
+        margin: 0; 
+        padding: 0; 
+        background-color: #000; 
+        font-family: 'Inter', sans-serif;
+    }}
+    .footer-container {{
+        background-color: #000; 
+        color: #fff; 
+        padding: 60px 40px; 
+        border-top: 1px solid #333;
+    }}
+    .footer-columns {{
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: space-between; 
+        max-width: 1200px; 
+        margin: 0 auto; 
+        gap: 40px;
+    }}
+    .footer-column {{
+        flex: 1; 
+        min-width: 250px;
+    }}
+    .footer-title {{
+        font-size: 20px; 
+        font-weight: 700; 
+        margin-bottom: 25px; 
+        border-bottom: 3px solid #444; 
+        padding-bottom: 10px; 
+        display: inline-block; 
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }}
+    .footer-list {{
+        list-style: none; 
+        padding: 0; 
+        font-size: 16px; 
+        color: #aaa; 
+        line-height: 2.2;
+    }}
+    .footer-bottom {{
+        margin-top: 80px; 
+        padding-top: 30px; 
+        border-top: 1px solid #222; 
+        display: flex; 
+        flex-wrap: wrap; 
+        justify-content: space-between; 
+        align-items: center; 
+        font-size: 13px; 
+        color: #666; 
+        gap: 15px;
+    }}
+</style>
+<div class="footer-container">
+    <div style="text-align: center; width: 100%; margin-bottom: 50px;">
+        {logo_html.replace('height: 60px', 'height: 100px')}
     </div>
     
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1100px; margin: 0 auto; gap: 30px;">
-        <div style="flex: 1; min-width: 200px;">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 8px; display: inline-block; color: #eee;">Virtual EAFIT</h3>
-            <ul style="list-style: none; padding: 0; font-size: 14px; color: #999; line-height: 2;">
+    <div class="footer-columns">
+        <div class="footer-column">
+            <h3 class="footer-title">Virtual EAFIT</h3>
+            <ul class="footer-list">
                 <li>¿Por qué estudiar en EAFIT?</li>
                 <li>¿Qué quieres estudiar?</li>
             </ul>
         </div>
         
-        <div style="flex: 1; min-width: 200px;">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 8px; display: inline-block; color: #eee;">Consultar aquí</h3>
-            <ul style="list-style: none; padding: 0; font-size: 14px; color: #999; line-height: 2;">
+        <div class="footer-column">
+            <h3 class="footer-title">Consultar aquí</h3>
+            <ul class="footer-list">
                 <li>Política de protección de datos</li>
                 <li>Políticas de cookies</li>
                 <li>Políticas de cancelación y devolución</li>
             </ul>
         </div>
         
-        <div style="flex: 1; min-width: 200px;">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 8px; display: inline-block; color: #eee;">Contáctanos</h3>
-            <ul style="list-style: none; padding: 0; font-size: 14px; color: #999; line-height: 2;">
+        <div class="footer-column">
+            <h3 class="footer-title">Contáctanos</h3>
+            <ul class="footer-list">
                 <li>Tel: (60) (4) 2619500 opción 1 - opción 3</li>
                 <li>WhatsApp: +57 310 8992908</li>
                 <li>Email: inscripciones-ep@eafit.edu.co</li>
@@ -350,18 +407,18 @@ def render_footer():
         </div>
     </div>
     
-    <div style="margin-top: 60px; padding-top: 20px; border-top: 1px solid #222; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 11px; color: #555; gap: 10px;">
-        <div style="max-width: 600px;">
+    <div class="footer-bottom">
+        <div style="max-width: 700px;">
             Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
         </div>
-        <div style="text-align: right;">
+        <div style="text-align: right; font-weight: 700;">
             &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
         </div>
     </div>
 </div>
 """
-    # Usar st.components.v1.html para asegurar que el HTML se interprete como tal
-    st.components.v1.html(footer_html, height=450)
+    # Usar st.components.v1.html con height ajustado para el nuevo tamaño
+    st.components.v1.html(footer_html, height=550)
 
 def show_loading_animation():
     """Animación de carga personalizada."""
