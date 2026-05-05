@@ -301,15 +301,33 @@ neutraliza **7 patrones de ataque** antes de que lleguen al LLM.
 
 def render_footer():
     """Footer institucional completo siguiendo el diseño de EAFIT."""
+    # Inyectar CSS para asegurar que el footer ocupe todo el ancho y no tenga márgenes blancos
+    st.markdown("""
+        <style>
+            iframe[title="st.iframe"] {
+                width: 100% !important;
+                border: none !important;
+            }
+            .main .block-container {
+                max-width: 100% !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                padding-bottom: 0 !important;
+            }
+            [data-testid="stVerticalBlock"] {
+                gap: 0 !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
     # Intentar cargar el logo para embeberlo en base64
     logo_html = ""
     try:
-        # LOGO EAFIT NEGRO.jpg es el que tiene texto blanco sobre fondo negro
         logo_path = "LOGO EAFIT NEGRO.jpg"
         if os.path.exists(logo_path):
             with open(logo_path, "rb") as f:
                 logo_data = base64.b64encode(f.read()).decode()
-                logo_html = f'<img src="data:image/jpeg;base64,{logo_data}" style="height: 60px; margin-bottom: 2.5rem; filter: brightness(1.2);">'
+                logo_html = f'<img src="data:image/jpeg;base64,{logo_data}" style="height: 80px; margin-bottom: 40px; filter: brightness(1.2);">'
         else:
             logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
     except Exception:
@@ -327,55 +345,57 @@ def render_footer():
     .footer-container {{
         background-color: #000; 
         color: #fff; 
-        padding: 80px 40px; 
-        border-top: 2px solid #333;
+        padding: 50px 10%; 
+        border-top: 1px solid #333;
+        width: 100%;
+        box-sizing: border-box;
     }}
     .footer-columns {{
         display: flex; 
         flex-wrap: wrap; 
         justify-content: space-between; 
-        max-width: 1300px; 
+        max-width: 1100px;
         margin: 0 auto; 
-        gap: 60px;
+        gap: 30px;
     }}
     .footer-column {{
         flex: 1; 
-        min-width: 300px;
+        min-width: 200px;
     }}
     .footer-title {{
-        font-size: 26px; 
+        font-size: 18px; 
         font-weight: 700; 
-        margin-bottom: 30px; 
-        border-bottom: 4px solid #444; 
-        padding-bottom: 12px; 
+        margin-bottom: 20px; 
+        border-bottom: 2px solid #333; 
+        padding-bottom: 8px; 
         display: inline-block; 
         color: #fff;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
+        letter-spacing: 0.5px;
     }}
     .footer-list {{
         list-style: none; 
         padding: 0; 
-        font-size: 20px; 
-        color: #bbb; 
-        line-height: 2.5;
+        font-size: 14px; 
+        color: #999; 
+        line-height: 1.8;
     }}
     .footer-bottom {{
-        margin-top: 100px; 
-        padding-top: 40px; 
+        margin-top: 50px; 
+        padding-top: 20px; 
         border-top: 1px solid #222; 
         display: flex; 
         flex-wrap: wrap; 
         justify-content: space-between; 
         align-items: center; 
-        font-size: 15px; 
-        color: #777; 
-        gap: 20px;
+        font-size: 11px; 
+        color: #555; 
+        gap: 10px;
     }}
 </style>
 <div class="footer-container">
-    <div style="text-align: center; width: 100%; margin-bottom: 70px;">
-        {logo_html.replace('height: 60px', 'height: 180px')}
+    <div style="text-align: center; width: 100%;">
+        {logo_html}
     </div>
     
     <div class="footer-columns">
@@ -408,17 +428,16 @@ def render_footer():
     </div>
     
     <div class="footer-bottom">
-        <div style="max-width: 800px;">
+        <div style="max-width: 600px;">
             Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
         </div>
-        <div style="text-align: right; font-weight: 700; font-size: 16px;">
+        <div style="text-align: right;">
             &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
         </div>
     </div>
 </div>
 """
-    # Usar st.components.v1.html con height ajustado para el nuevo tamaño XL
-    st.components.v1.html(footer_html, height=750)
+    st.components.v1.html(footer_html, height=450)
 
 def show_loading_animation():
     """Animación de carga personalizada."""
