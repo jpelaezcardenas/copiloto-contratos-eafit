@@ -10,19 +10,35 @@ def process_analysis_results(analysis_raw: dict) -> dict:
     riesgos = analysis_raw.get("riesgos", [])
     
     # Calcular nivel de severidad para el semáforo
-    severidad_max = "BAJO"
-    niveles_prioridad = {"ALTO": 3, "MEDIO": 2, "BAJO": 1}
+    # Respetamos el semáforo del LLM si ya es ALTO
+    llm_semaforo = str(analysis_raw.get("semaforo", "BAJO")).upper()
+    severidad_max = llm_semaforo if llm_semaforo in ["ALTO", "MODERADO", "MEDIO"] else "BAJO"
+    
+    niveles_prioridad = {"ALTO": 3, "MEDIO": 2, "MODERADO": 2, "BAJO": 1}
     
     for r in riesgos:
-        # Aceptar tanto "level" (del prompt LLM) como "nivel"
+        # Aceptar tanto "level" como "nivel"
         nivel = r.get("level", r.get("nivel", "BAJO")).upper()
-        # Normalizar: asegurar que el riesgo tenga ambos campos
+        # Normalizar
         r["nivel"] = nivel
         r["level"] = nivel
         if niveles_prioridad.get(nivel, 0) > niveles_prioridad.get(severidad_max, 0):
             severidad_max = nivel
             
-    # Inyectar el semáforo final en los datos
+    # Si el semáforo es ALTO o MEDIO pero no hay riesgos en la lista,
+    # inyectamos un riesgo informativo para que el usuario no vea la tabla vacía
+    if severidad_max in ["ALTO", "MODERADO", "MEDIO"] and not riesgos:
+        riesgos.append({
+            "categoria": "Riesgos en Concepto",
+            "nivel": severidad_max,
+            "descripcion": "Se detectaron riesgos críticos mencionados en el resumen ejecutivo que requieren atención.",
+            "clausula": "Ver Resumen",
+            "referencia_legal": "Múltiples",
+            "recomendacion": "Revisar el 'Concepto Jurídico' arriba para detalles específicos de los riesgos detectados por la IA."
+        })
+        analysis_raw["riesgos"] = riesgos
+
+    # Inyectar el semáforo final
     analysis_raw["semaforo"] = severidad_max
     
     return analysis_raw

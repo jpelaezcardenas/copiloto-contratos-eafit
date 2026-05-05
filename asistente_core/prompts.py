@@ -152,50 +152,44 @@ Asigna un nivel de riesgo general:
 - 🟡 MODERADO: Requiere revisión en algunos puntos, posibles desviaciones de principios EAFIT
 - 🔴 ALTO: Atención inmediata, riesgos críticos, violación de principios EAFIT
 
-## Formato de Respuesta:
-Responde EXCLUSIVAMENTE con un JSON válido con la siguiente estructura exacta:
+Responde EXCLUSIVAMENTE con un JSON válido. Sé extremadamente conciso. 
+IMPORTANTE: Si identificas riesgos en tu análisis, DEBES incluirlos en el array "riesgos". No los dejes solo en el resumen.
 
 {
+  "riesgos": [
+    {
+      "categoria": "Nombre corto",
+      "nivel": "ALTO|MEDIO|BAJO",
+      "descripcion": "Máximo 20 palabras",
+      "clausula": "Ref o N/A",
+      "referencia_legal": "Norma",
+      "recomendacion": "Acción"
+    }
+  ],
   "identificacion": {
-    "partes": {
-      "contratante": "...",
-      "contratista": "..."
-    },
+    "contratante": "...",
+    "contratista": "...",
     "tipo_contrato": "...",
     "objeto": "...",
-    "valor": "...",
-    "forma_pago": "...",
-    "plazo_ejecucion": "...",
-    "vigencia": "...",
+    "valor_y_pago": "...",
+    "plazo_y_vigencia": "...",
     "lugar_ejecucion": "...",
     "fecha_suscripcion": "..."
   },
   "evaluacion_principios_eafit": {
-    "equilibrio_contractual": "CUMPLE|PARCIAL|NO CUMPLE — explicación breve",
-    "transparencia": "CUMPLE|PARCIAL|NO CUMPLE — explicación breve",
-    "efectividad": "CUMPLE|PARCIAL|NO CUMPLE — explicación breve",
-    "legalidad": "CUMPLE|PARCIAL|NO CUMPLE — explicación breve",
-    "confidencialidad": "CUMPLE|PARCIAL|NO CUMPLE — explicación breve"
+    "equilibrio_contractual": "CUMPLE|PARCIAL|NO CUMPLE — breve",
+    "transparencia": "CUMPLE|PARCIAL|NO CUMPLE",
+    "efectividad": "CUMPLE|PARCIAL|NO CUMPLE",
+    "legalidad": "CUMPLE|PARCIAL|NO CUMPLE",
+    "confidencialidad": "CUMPLE|PARCIAL|NO CUMPLE"
   },
   "obligaciones": {
     "contratante": ["..."],
     "contratista": ["..."],
-    "hay_desequilibrio": false,
-    "nota_desequilibrio": "..."
+    "desequilibrio": "Descripción o 'No detectado'"
   },
-  "riesgos": [
-    {
-      "categoria": "ambiguedad_y_pi|clausulas_economicas|clausulas_abusivas|jurisdiccion|ruptura_equilibrio_slas|vigencia_terminacion|obligaciones_desproporcionadas|limitaciones_derechos|modificaciones_unilaterales|garantias_asimetricas",
-      "level": "ALTO|MEDIO|BAJO|NO_APLICA",
-      "descripcion": "Descripción específica del riesgo encontrado",
-      "clausula_afectada": "Cita textual o referencia a la cláusula del contrato",
-      "referencia_legal": "Artículo o ley aplicable + principio EAFIT si aplica",
-      "recomendacion": "Qué hacer para mitigar el riesgo"
-    }
-  ],
-  "resumen_ejecutivo": "Resumen de máximo 150 palabras...",
-  "semaforo": "BAJO|MODERADO|ALTO",
-  "notas_adicionales": "Cualquier observación importante no cubierta..."
+  "resumen_ejecutivo": "Máximo 150 palabras con hallazgos críticos.",
+  "semaforo": "BAJO|MODERADO|ALTO"
 }
 
 ## CONTRATO A ANALIZAR:

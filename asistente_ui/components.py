@@ -94,6 +94,17 @@ def render_dashboard(data, analysis_time=None):
                     <div style="color: white; font-size: 0.95rem;">{val_clean}</div>
                 </div>
                 """, unsafe_allow_html=True)
+        
+        # Mostrar alerta de desequilibrio si existe
+        deseq = obli.get('desequilibrio', obli.get('nota_desequilibrio', ''))
+        if (obli.get('hay_desequilibrio') or (deseq and 'no detectado' not in deseq.lower())):
+            st.markdown(f"""
+            <div style="background: rgba(220, 53, 69, 0.1); border-left: 3px solid #dc3545; padding: 10px; margin-top: 10px; border-radius: 4px;">
+                <div style="color: #ff6b6b; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 3px;">⚠️ Alerta de Desequilibrio</div>
+                <div style="color: white; font-size: 0.85rem;">{deseq}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
         st.markdown('</div>', unsafe_allow_html=True)
 
     # ── EVALUACIÓN PRINCIPIOS EAFIT (NUEVA SECCIÓN) ──

@@ -122,22 +122,69 @@ def compare_contracts(contract1_text: str, contract2_text: str) -> dict:
 
 def _parse_llm_response(raw_text: str) -> dict:
     """Parsea la respuesta para asegurar un dict válido, eliminando markdown si existe."""
+    if not raw_text or len(raw_text.strip()) < 10:
+        return {
+            "error": True,
+            "resumen_ejecutivo": "Error: La IA devolvió una respuesta vacía o demasiado corta.",
+            "semaforo": "ALTO",
+            "riesgos": [{"categoria": "Error de Sistema", "nivel": "ALTO", "descripcion": "No se pudo generar el análisis."}]
+        }
+
     try:
+        # Intento de limpieza de markdown
         clean = re.sub(r"^```(?:json)?\s*\n?", "", raw_text)
         clean = re.sub(r"\n?```\s*$", "", clean)
         clean = clean.strip()
-        return json.loads(clean)
+        
+        # Limpieza básica de comas finales (común en LLMs)
+        clean = re.sub(r",\s*([\]}])", r"\1", clean)
+        
+        parsed = json.loads(clean)
+        
+        # Asegurar campos mínimos para el reporte PDF y UI
+        # Mapeo de riesgos (el LLM a veces usa sinónimos)
+        for key in ["hallazgos", "riesgos_detectados", "lista_riesgos", "puntos_criticos"]:
+            if key in parsed and "riesgos" not in parsed:
+                parsed["riesgos"] = parsed[key]
+
+        if "resumen_ejecutivo" not in parsed and "resumen" in parsed:
+            parsed["resumen_ejecutivo"] = parsed["resumen"]
+        
+        # Si riesgos es un dict (error común), convertir a lista
+        if isinstance(parsed.get("riesgos"), dict):
+            parsed["riesgos"] = [parsed["riesgos"]]
+            
+        return parsed
+
     except json.JSONDecodeError:
+        # Intento de extraer JSON con regex
         match = re.search(r"(\{[\s\S]*\})", raw_text)
         if match:
             try:
-                return json.loads(match.group(1))
+                parsed = json.loads(match.group(1))
+                # Mapeo de riesgos en el regex match
+                for key in ["hallazgos", "riesgos_detectados", "lista_riesgos"]:
+                    if key in parsed and "riesgos" not in parsed:
+                        parsed["riesgos"] = parsed[key]
+                if "resumen_ejecutivo" not in parsed and "resumen" in parsed:
+                    parsed["resumen_ejecutivo"] = parsed["resumen"]
+                return parsed
             except:
                 pass
         
+        # Fallback Final: Si no es JSON, tomamos el texto crudo como resumen
+        # para que el usuario al menos pueda leer algo.
         return {
-            "error": True,
-            "mensaje": "Respuesta no estructurada.",
-            "respuesta_cruda": raw_text[:1000],
-            "semaforo": "ALTO",
+            "error": False, # Lo marcamos como False para que el reporte intente mostrarlo
+            "resumen_ejecutivo": raw_text,
+            "identificacion": {"Estado": "Analisis No Estructurado"},
+            "semaforo": "ALTO", # Por seguridad ante fallo
+            "riesgos": [
+                {
+                    "categoria": "Analisis Crudo",
+                    "nivel": "ALTO",
+                    "descripcion": "La IA no pudo formatear los datos, pero detectó riesgos potenciales que se detallan en el concepto jurídico arriba."
+                }
+            ],
+            "obligaciones": {"nota_desequilibrio": "Revisar texto completo del concepto."}
         }

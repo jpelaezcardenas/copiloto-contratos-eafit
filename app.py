@@ -144,7 +144,7 @@ def main():
                             # 1. Extracción según la fuente
                             if has_pdf:
                                 text = extract_text_from_pdf(uploaded_file)
-                                full_text = str(text) if isinstance(text, dict) else str(text)
+                                full_text = text.get("text", "") if isinstance(text, dict) else str(text)
                                 doc_name = uploaded_file.name
                             else:
                                 full_text = sanitize_extracted_text(pasted_text)
