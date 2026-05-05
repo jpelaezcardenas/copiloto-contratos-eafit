@@ -2,8 +2,6 @@
 
 import json
 import streamlit as st
-import base64
-import os
 
 def _format_value(value):
     """Limpia valores para mostrarlos de forma elegante en la UI."""
@@ -300,144 +298,12 @@ neutraliza **7 patrones de ataque** antes de que lleguen al LLM.
 """, unsafe_allow_html=True)
 
 def render_footer():
-    """Footer institucional completo siguiendo el diseño de EAFIT."""
-    # Inyectar CSS para asegurar que el footer ocupe todo el ancho y no tenga márgenes blancos
+    """Footer institucional minimalista."""
     st.markdown("""
-        <style>
-            iframe[title="st.iframe"] {
-                width: 100% !important;
-                border: none !important;
-            }
-            .main .block-container {
-                max-width: 100% !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
-                padding-bottom: 0 !important;
-            }
-            [data-testid="stVerticalBlock"] {
-                gap: 0 !important;
-            }
-        </style>
+    <div style="text-align: center; color: #444; font-size: 0.70rem; padding: 1rem 0; margin-top: 2rem; border-top: 1px solid #222;">
+        &copy; 2026 Universidad EAFIT - Medellín, Colombia | Asistente Jurídico IA — Equipo Antigravity
+    </div>
     """, unsafe_allow_html=True)
-
-    # Intentar cargar el logo para embeberlo en base64
-    logo_html = ""
-    try:
-        logo_path = "LOGO EAFIT NEGRO.jpg"
-        if os.path.exists(logo_path):
-            with open(logo_path, "rb") as f:
-                logo_data = base64.b64encode(f.read()).decode()
-                logo_html = f'<img src="data:image/jpeg;base64,{logo_data}" style="height: 80px; margin-bottom: 40px; filter: brightness(1.2);">'
-        else:
-            logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
-    except Exception:
-        logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
-
-    footer_html = f"""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-    body {{ 
-        margin: 0; 
-        padding: 0; 
-        background-color: #000; 
-        font-family: 'Inter', sans-serif;
-    }}
-    .footer-container {{
-        background-color: #000; 
-        color: #fff; 
-        padding: 50px 10%; 
-        border-top: 1px solid #333;
-        width: 100%;
-        box-sizing: border-box;
-    }}
-    .footer-columns {{
-        display: flex; 
-        flex-wrap: wrap; 
-        justify-content: space-between; 
-        max-width: 1100px;
-        margin: 0 auto; 
-        gap: 30px;
-    }}
-    .footer-column {{
-        flex: 1; 
-        min-width: 200px;
-    }}
-    .footer-title {{
-        font-size: 18px; 
-        font-weight: 700; 
-        margin-bottom: 20px; 
-        border-bottom: 2px solid #333; 
-        padding-bottom: 8px; 
-        display: inline-block; 
-        color: #fff;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }}
-    .footer-list {{
-        list-style: none; 
-        padding: 0; 
-        font-size: 14px; 
-        color: #999; 
-        line-height: 1.8;
-    }}
-    .footer-bottom {{
-        margin-top: 50px; 
-        padding-top: 20px; 
-        border-top: 1px solid #222; 
-        display: flex; 
-        flex-wrap: wrap; 
-        justify-content: space-between; 
-        align-items: center; 
-        font-size: 11px; 
-        color: #555; 
-        gap: 10px;
-    }}
-</style>
-<div class="footer-container">
-    <div style="text-align: center; width: 100%;">
-        {logo_html}
-    </div>
-    
-    <div class="footer-columns">
-        <div class="footer-column">
-            <h3 class="footer-title">Virtual EAFIT</h3>
-            <ul class="footer-list">
-                <li>¿Por qué estudiar en EAFIT?</li>
-                <li>¿Qué quieres estudiar?</li>
-            </ul>
-        </div>
-        
-        <div class="footer-column">
-            <h3 class="footer-title">Consultar aquí</h3>
-            <ul class="footer-list">
-                <li>Política de protección de datos</li>
-                <li>Políticas de cookies</li>
-                <li>Políticas de cancelación y devolución</li>
-            </ul>
-        </div>
-        
-        <div class="footer-column">
-            <h3 class="footer-title">Contáctanos</h3>
-            <ul class="footer-list">
-                <li>Tel: (60) (4) 2619500 opción 1 - opción 3</li>
-                <li>WhatsApp: +57 310 8992908</li>
-                <li>Email: inscripciones-ep@eafit.edu.co</li>
-                <li>Déjanos tus datos</li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="footer-bottom">
-        <div style="max-width: 600px;">
-            Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
-        </div>
-        <div style="text-align: right;">
-            &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
-        </div>
-    </div>
-</div>
-"""
-    st.components.v1.html(footer_html, height=450)
 
 def show_loading_animation():
     """Animación de carga personalizada."""
