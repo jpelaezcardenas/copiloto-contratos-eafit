@@ -315,54 +315,55 @@ def render_footer():
     except Exception:
         logo_html = '<h2 style="color: white; margin-bottom: 2rem; font-family: sans-serif;">UNIVERSIDAD EAFIT</h2>'
 
-    st.markdown(f"""
-    <div style="background-color: #000; color: #fff; padding: 4rem 2rem 2rem 2rem; margin-top: 5rem; border-top: 1px solid #333; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
-        <div style="text-align: center; width: 100%;">
-            {logo_html}
+    footer_html = f"""
+<div style="background-color: #000; color: #fff; padding: 4rem 2rem 2rem 2rem; margin-top: 5rem; border-top: 1px solid #333; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;">
+    <div style="text-align: center; width: 100%;">
+        {logo_html}
+    </div>
+    
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1100px; margin: 0 auto; gap: 3rem;">
+        <!-- Columna 1 -->
+        <div style="flex: 1; min-width: 200px;">
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Virtual EAFIT</h3>
+            <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
+                <li>¿Por qué estudiar en EAFIT?</li>
+                <li>¿Qué quieres estudiar?</li>
+            </ul>
         </div>
         
-        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1100px; margin: 0 auto; gap: 3rem;">
-            <!-- Columna 1 -->
-            <div style="flex: 1; min-width: 200px;">
-                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Virtual EAFIT</h3>
-                <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
-                    <li>¿Por qué estudiar en EAFIT?</li>
-                    <li>¿Qué quieres estudiar?</li>
-                </ul>
-            </div>
-            
-            <!-- Columna 2 -->
-            <div style="flex: 1; min-width: 200px;">
-                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Consultar aquí</h3>
-                <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
-                    <li>Política de protección de datos</li>
-                    <li>Políticas de cookies</li>
-                    <li>Políticas de cancelación y devolución</li>
-                </ul>
-            </div>
-            
-            <!-- Columna 3 -->
-            <div style="flex: 1; min-width: 200px;">
-                <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Contáctanos</h3>
-                <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
-                    <li>Tel: (60) (4) 2619500 opción 1 - opción 3</li>
-                    <li>WhatsApp: +57 310 8992908</li>
-                    <li>Email: inscripciones-ep@eafit.edu.co</li>
-                    <li>Déjanos tus datos</li>
-                </ul>
-            </div>
+        <!-- Columna 2 -->
+        <div style="flex: 1; min-width: 200px;">
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Consultar aquí</h3>
+            <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
+                <li>Política de protección de datos</li>
+                <li>Políticas de cookies</li>
+                <li>Políticas de cancelación y devolución</li>
+            </ul>
         </div>
         
-        <div style="margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid #222; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #555; gap: 1rem;">
-            <div style="max-width: 600px;">
-                Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
-            </div>
-            <div style="text-align: right;">
-                &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
-            </div>
+        <!-- Columna 3 -->
+        <div style="flex: 1; min-width: 200px;">
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1.2rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; display: inline-block; color: #eee;">Contáctanos</h3>
+            <ul style="list-style: none; padding: 0; font-size: 0.85rem; color: #999; line-height: 2;">
+                <li>Tel: (60) (4) 2619500 opción 1 - opción 3</li>
+                <li>WhatsApp: +57 310 8992908</li>
+                <li>Email: inscripciones-ep@eafit.edu.co</li>
+                <li>Déjanos tus datos</li>
+            </ul>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+    
+    <div style="margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid #222; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-size: 0.7rem; color: #555; gap: 1rem;">
+        <div style="max-width: 600px;">
+            Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
+        </div>
+        <div style="text-align: right;">
+            &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
+        </div>
+    </div>
+</div>
+"""
+    st.markdown(footer_html, unsafe_allow_html=True)
 
 def show_loading_animation():
     """Animación de carga personalizada."""
