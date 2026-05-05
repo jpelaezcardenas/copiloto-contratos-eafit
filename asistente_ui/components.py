@@ -327,55 +327,55 @@ def render_footer():
     .footer-container {{
         background-color: #000; 
         color: #fff; 
-        padding: 60px 40px; 
-        border-top: 1px solid #333;
+        padding: 80px 40px; 
+        border-top: 2px solid #333;
     }}
     .footer-columns {{
         display: flex; 
         flex-wrap: wrap; 
         justify-content: space-between; 
-        max-width: 1200px; 
+        max-width: 1300px; 
         margin: 0 auto; 
-        gap: 40px;
+        gap: 60px;
     }}
     .footer-column {{
         flex: 1; 
-        min-width: 250px;
+        min-width: 300px;
     }}
     .footer-title {{
-        font-size: 20px; 
+        font-size: 26px; 
         font-weight: 700; 
-        margin-bottom: 25px; 
-        border-bottom: 3px solid #444; 
-        padding-bottom: 10px; 
+        margin-bottom: 30px; 
+        border-bottom: 4px solid #444; 
+        padding-bottom: 12px; 
         display: inline-block; 
         color: #fff;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
     }}
     .footer-list {{
         list-style: none; 
         padding: 0; 
-        font-size: 16px; 
-        color: #aaa; 
-        line-height: 2.2;
+        font-size: 20px; 
+        color: #bbb; 
+        line-height: 2.5;
     }}
     .footer-bottom {{
-        margin-top: 80px; 
-        padding-top: 30px; 
+        margin-top: 100px; 
+        padding-top: 40px; 
         border-top: 1px solid #222; 
         display: flex; 
         flex-wrap: wrap; 
         justify-content: space-between; 
         align-items: center; 
-        font-size: 13px; 
-        color: #666; 
-        gap: 15px;
+        font-size: 15px; 
+        color: #777; 
+        gap: 20px;
     }}
 </style>
 <div class="footer-container">
-    <div style="text-align: center; width: 100%; margin-bottom: 50px;">
-        {logo_html.replace('height: 60px', 'height: 100px')}
+    <div style="text-align: center; width: 100%; margin-bottom: 70px;">
+        {logo_html.replace('height: 60px', 'height: 180px')}
     </div>
     
     <div class="footer-columns">
@@ -408,17 +408,17 @@ def render_footer():
     </div>
     
     <div class="footer-bottom">
-        <div style="max-width: 700px;">
+        <div style="max-width: 800px;">
             Vigilada Mineducación Universidad con Acreditación Institucional hasta 2026. Todos los derechos reservados.
         </div>
-        <div style="text-align: right; font-weight: 700;">
+        <div style="text-align: right; font-weight: 700; font-size: 16px;">
             &copy; 2026 Universidad EAFIT | Asistente Jurídico IA — Equipo Antigravity
         </div>
     </div>
 </div>
 """
-    # Usar st.components.v1.html con height ajustado para el nuevo tamaño
-    st.components.v1.html(footer_html, height=550)
+    # Usar st.components.v1.html con height ajustado para el nuevo tamaño XL
+    st.components.v1.html(footer_html, height=750)
 
 def show_loading_animation():
     """Animación de carga personalizada."""
