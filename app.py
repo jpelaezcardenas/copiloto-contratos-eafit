@@ -76,7 +76,7 @@ def main():
         st.markdown("""
             <div class="hero-container" style="text-align: center; display: flex; flex-direction: column; align-items: center;">
                 <h1 class="main-title">Asistente jurídico para análisis contractual</h1>
-                <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales o comparativos en segundos. Acelera la revisión documental y optimiza los procesos legales de la secretaría general de la Universidad EAFIT</p>
+                <p class="subtitle">Nuestra inteligencia artificial comprende los contratos más complejos y entrega análisis integrales o comparativos en segundos. Acelera la revisión documental y optimiza los procesos legales de la secretaria general de la Universidad EAFIT</p>
             </div>
             <div style="height: 1rem;"></div>
         """, unsafe_allow_html=True)

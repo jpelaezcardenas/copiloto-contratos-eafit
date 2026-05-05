@@ -11,11 +11,17 @@ def apply_custom_styles():
     try:
         # Calcular ruta absoluta relativa a la raíz del proyecto
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        bg_path = os.path.join(base_dir, "eafit-medellin.webp")
+        bg_path = os.path.join(base_dir, "eafit-fondo.png")
         with open(bg_path, "rb") as image_file:
             bg_img_base64 = base64.b64encode(image_file.read()).decode()
     except Exception:
-        pass
+        # Fallback a la imagen anterior si no existe
+        try:
+            bg_path = os.path.join(base_dir, "eafit-medellin.webp")
+            with open(bg_path, "rb") as image_file:
+                bg_img_base64 = base64.b64encode(image_file.read()).decode()
+        except Exception:
+            pass
 
     # Usar comillas triples simples para evitar que Python intente parsear {} como variables f-string
     css_content = """
@@ -39,12 +45,27 @@ def apply_custom_styles():
 
         /* Reset general con fondo de imagen (Base64) */
         .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-            background-image: linear-gradient(to bottom, rgba(0, 10, 30, 0.7), rgba(0, 5, 15, 0.95)), url("data:image/webp;base64,__BG_IMG_BASE64__") !important;
+            background: 
+                radial-gradient(circle at center, rgba(0, 5, 20, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%),
+                url("data:image/png;base64,__BG_IMG_BASE64__") !important;
             background-size: cover !important;
-            background-position: center !important;
+            background-position: center center !important;
             background-attachment: fixed !important;
             background-color: #000000 !important;
             color: #FFFFFF !important;
+        }
+
+        /* Capa de profundidad para el scroll */
+        .main::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         /* Forzar modo oscuro en widgets de Streamlit */
@@ -67,17 +88,25 @@ def apply_custom_styles():
             color: #FFFFFF !important;
         }
 
-        /* Hero Section Premium con Glassmorphism */
+        /* Hero Section Premium con Glassmorphism Extremo */
         .hero-container {
-            padding: 2.5rem;
+            padding: 3rem 2rem;
             text-align: center;
-            background: linear-gradient(135deg, rgba(0, 51, 153, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            margin-bottom: 2.5rem;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hero-container:hover {
+            border-color: rgba(255, 204, 0, 0.3);
+            transform: scale(1.01);
         }
 
         .main-title {
@@ -195,6 +224,16 @@ def apply_custom_styles():
             color: white !important;
             border: 1px solid var(--border) !important;
             border-radius: 10px !important;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-container, .risk-card, .semaforo-banner {
+            animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
         /* Footer minimalista */
