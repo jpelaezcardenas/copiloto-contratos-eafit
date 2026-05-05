@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 # ── FORZAR DIRECTORIO RAÍZ (PARA DESPLIEGUE CLOUD) ──────────────────
 base_path = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +20,7 @@ st.set_page_config(
 
 # IMPORTACIONES LOCALES (Deben coincidir con los nombres de las carpetas)
 from asistente_ui.styles import apply_custom_styles
-from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard, render_evaluation_tab
+from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard
 
 # ── LOGICA DE NEGOCIO ──────────────────────────────────────────
 from asistente_core.pdf_extractor import extract_text_from_pdf, sanitize_extracted_text
@@ -80,8 +81,8 @@ def main():
             <div style="height: 1rem;"></div>
         """, unsafe_allow_html=True)
         
-        # ── TABS: PDF, Texto, Comparar, Evaluar ──────────────────────
-        tab_pdf, tab_text, tab_compare, tab_eval = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos", "🎯 Evaluar Detección"])
+        # ── TABS: PDF, Texto, Comparar ──────────────────────
+        tab_pdf, tab_text, tab_compare = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos"])
 
         with tab_pdf:
             uploaded_file = st.file_uploader(
@@ -119,8 +120,7 @@ def main():
                 comp_file2 = st.file_uploader("PDF 2", type=["pdf"], key="comp_file2")
                 comp_text2 = st.text_area("O pega el texto 2", height=150, key="comp_text2")
 
-        with tab_eval:
-            render_evaluation_tab()
+
 
     # Renderizar Sidebar (incluye historial)
     render_sidebar()
@@ -153,8 +153,10 @@ def main():
                             if not full_text.strip():
                                 st.error("No se pudo extraer texto. Verifica el documento.")
                             else:
-                                # 2. Análisis LLM
+                                # 2. Análisis LLM (con métricas de tiempo)
+                                t_start = time.time()
                                 analysis_raw = analyze_contract(full_text)
+                                t_elapsed = time.time() - t_start
                                 # 3. Procesamiento de riesgos
                                 final_data = process_analysis_results(analysis_raw)
                                 
@@ -162,6 +164,7 @@ def main():
                                 st.session_state.analysis_complete = True
                                 st.session_state.comparison_complete = False
                                 st.session_state.analysis_data = final_data
+                                st.session_state.analysis_time = t_elapsed
                                 
                                 # Guardar en el historial
                                 st.session_state.history.append({
@@ -204,7 +207,7 @@ def main():
 
     # 4. Mostrar Dashboard (Individual o Comparativo)
     if st.session_state.get("analysis_complete") and not st.session_state.get("comparison_complete"):
-        render_dashboard(st.session_state.analysis_data)
+        render_dashboard(st.session_state.analysis_data, analysis_time=st.session_state.get("analysis_time"))
     elif st.session_state.get("comparison_complete"):
         n1, n2 = st.session_state.get("comp_names", ("Doc 1", "Doc 2"))
         render_comparison_dashboard(st.session_state.comp_data, n1, n2)

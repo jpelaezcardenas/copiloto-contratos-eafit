@@ -40,12 +40,16 @@ LLM_MODEL = "llama-3.3-70b-versatile"
 LLM_TEMPERATURE = 0.1
 LLM_MAX_TOKENS = 4096
 
-# Configuración de categorías de riesgo (Taxonomía EAFIT)
+# Configuración de categorías de riesgo (Taxonomía EAFIT — 10 categorías)
 RISK_CATEGORIES = {
-    "AMBIGUEDAD": "Cláusulas imprecisas o confusas.",
-    "PENALIDADES": "Sanciones desproporcionadas o unilaterales.",
-    "VALIDEZ": "Incumplimiento de normativa colombiana (CST, CC, etc.).",
-    "TERMINACION": "Condiciones de salida asimétricas.",
-    "PROPIEDAD_INTELECTUAL": "Riesgos en la titularidad de derechos.",
-    "JURISDICCION": "Conflictos de leyes o fueros extranjeros."
+    "AMBIGUEDAD_Y_PI": "Cláusulas imprecisas, propiedad intelectual y confidencialidad.",
+    "CLAUSULAS_ECONOMICAS": "Penalidades asimétricas, reajustes y recargos excesivos.",
+    "CLAUSULAS_ABUSIVAS": "Limitaciones extremas de responsabilidad, renuncias encubiertas.",
+    "JURISDICCION": "Conflictos de leyes, fueros desfavorables, costos judiciales asimétricos.",
+    "RUPTURA_EQUILIBRIO_SLAS": "Modificaciones unilaterales de alcance, SLAs débiles.",
+    "VIGENCIA_TERMINACION": "Prórrogas agresivas, terminación asimétrica, lock-in.",
+    "OBLIGACIONES_DESPROPORCIONADAS": "Compromisos excesivos sin límites claros.",
+    "LIMITACIONES_DERECHOS": "Renuncia a remedios legales o garantías implícitas.",
+    "MODIFICACIONES_UNILATERALES": "Cambio de condiciones sin consentimiento mutuo.",
+    "GARANTIAS_ASIMETRICAS": "Desequilibrios en declaraciones y garantías de las partes.",
 }

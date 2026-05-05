@@ -6,3 +6,4 @@ python-dotenv
 openai
 groq
 requests
+fpdf2
