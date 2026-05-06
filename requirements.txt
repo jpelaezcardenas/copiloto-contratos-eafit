@@ -7,3 +7,4 @@ openai
 groq
 requests
 fpdf2
+python-docx

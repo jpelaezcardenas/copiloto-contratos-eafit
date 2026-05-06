@@ -22,7 +22,12 @@ from asistente_ui.styles import apply_custom_styles
 from asistente_ui.components import render_dashboard, render_sidebar, show_loading_animation, render_footer, render_comparison_dashboard
 
 # ── LOGICA DE NEGOCIO ──────────────────────────────────────────
-from asistente_core.pdf_extractor import extract_text_from_pdf, sanitize_extracted_text
+from asistente_core.pdf_extractor import (
+    extract_text_from_file,
+    extract_text_from_pdf,
+    extract_text_from_google_doc,
+    sanitize_extracted_text,
+)
 from asistente_core.llm_analyzer import analyze_contract, compare_contracts
 from asistente_core.risk_detector import process_analysis_results
 
@@ -81,14 +86,28 @@ def main():
         """, unsafe_allow_html=True)
         
         # ── TABS: PDF, Texto, Comparar, Evaluar ──────────────────────
-        tab_pdf, tab_text, tab_compare = st.tabs(["📄 Cargar PDF", "📋 Pegar Texto", "⚖️ Comparar Contratos"])
+        tab_pdf, tab_gdoc, tab_text, tab_compare = st.tabs([
+            "📄 Cargar PDF / Word",
+            "🌐 Google Docs",
+            "📋 Pegar Texto",
+            "⚖️ Comparar Contratos",
+        ])
 
         with tab_pdf:
             uploaded_file = st.file_uploader(
-                "Arrastra y suelta el contrato (PDF) para iniciar el análisis", 
-                type=["pdf"], 
+                "Arrastra y suelta el contrato (PDF o Word) para iniciar el análisis",
+                type=["pdf", "docx"],
                 key="file_pdf",
-                help="Los archivos se procesan de forma privada y no se almacenan permanentemente."
+                help="Soporta PDF y Word (.docx). Los archivos se procesan de forma privada."
+            )
+
+        with tab_gdoc:
+            st.markdown("<p style='color:white;'>Pega el enlace de un Google Doc compartido públicamente.</p>", unsafe_allow_html=True)
+            gdoc_url = st.text_input(
+                "URL de Google Docs",
+                key="gdoc_url",
+                placeholder="https://docs.google.com/document/d/.../edit",
+                help="El documento debe estar compartido como 'Cualquier persona con el enlace puede ver'."
             )
 
         with tab_text:
@@ -124,9 +143,10 @@ def main():
     render_sidebar()
 
     # Variables de control
-    has_pdf = uploaded_file is not None if 'uploaded_file' in locals() else False
+    has_pdf  = uploaded_file is not None if 'uploaded_file' in locals() else False
+    has_gdoc = bool(gdoc_url.strip()) if 'gdoc_url' in locals() and gdoc_url else False
     has_text = bool(pasted_text.strip()) if 'pasted_text' in locals() and pasted_text else False
-    
+
     # Evaluar si se puede comparar
     has_comp1 = (comp_file1 is not None) or bool(comp_text1.strip())
     has_comp2 = (comp_file2 is not None) or bool(comp_text2.strip())
@@ -135,15 +155,19 @@ def main():
     with col_u2:
         col_b1, col_b2, col_b3 = st.columns([1, 1, 1])
         with col_b2:
-            if has_pdf or has_text:
+            if has_pdf or has_gdoc or has_text:
                 if st.button("🔍 INICIAR ANÁLISIS JURÍDICO", width="stretch", type="primary"):
                     with show_loading_animation():
                         try:
                             # 1. Extracción según la fuente
                             if has_pdf:
-                                text = extract_text_from_pdf(uploaded_file)
-                                full_text = text.get("text", "") if isinstance(text, dict) else str(text)
+                                extraction = extract_text_from_file(uploaded_file)
+                                full_text = extraction.get("text", "")
                                 doc_name = uploaded_file.name
+                            elif has_gdoc:
+                                extraction = extract_text_from_google_doc(gdoc_url.strip())
+                                full_text = extraction.get("text", "")
+                                doc_name = "Google Doc"
                             else:
                                 full_text = sanitize_extracted_text(pasted_text)
                                 doc_name = "Texto Pegado"
